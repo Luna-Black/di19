@@ -38,7 +38,6 @@ $router->get('/Login', 'User#loginForm');
 $router->post('/Login', 'User#loginCheck');
 $router->get('/Logout', 'User#logout');
 
-
 echo $router->run();
 
 
