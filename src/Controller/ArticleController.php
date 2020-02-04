@@ -23,6 +23,10 @@ class ArticleController extends AbstractController {
         );
     }
 
+    public function search($keyword) {
+
+    }
+
     public function add(){
         UserController::roleNeed('redacteur');
         if($_POST AND $_SESSION['token'] == $_POST['token']){
