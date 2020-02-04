@@ -45,7 +45,53 @@ class Category {
     }
 
     public function SqlGetAll(\PDO $bdd) {
-        $requete = $bdd->prepare()
+        $requete = $bdd->prepare('SELECT * FROM categories');
+        $requete->execute();
+        $arrayCategories = $requete->fetchAll();
+
+        $listCategories = [];
+        foreach ($arrayCategories as $categorieSQL){
+            $categorie = new Category();
+            $categorie->setId($categorieSQL['Id']);
+            $categorie->setNom($categorieSQL['Nom']);
+
+            $listCategories[] = $categorie;
+        }
+        return $listCategories;
 
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->Id;
+    }
+
+    /**
+     * @param mixed $Id
+     */
+    public function setId($Id)
+    {
+        $this->Id = $Id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNom()
+    {
+        return $this->Nom;
+    }
+
+    /**
+     * @param mixed $Nom
+     */
+    public function setNom($Nom)
+    {
+        $this->Nom = $Nom;
+    }
+
+
 }
