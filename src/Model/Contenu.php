@@ -5,6 +5,8 @@ class Contenu {
     private $Id;
     private $Titre;
     private $Description;
+    private $Statut;
+    private $Category;
 
 
     /**
@@ -61,6 +63,22 @@ class Contenu {
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getStatut()
+    {
+        return $this->Statut;
+    }
 
+    /**
+     * @param mixed $Statut
+     * @return Contenu
+     */
+    public function setStatut($Statut)
+    {
+        $this->Statut = $Statut;
+        return $this;
+    }
 
 }

@@ -7,6 +7,7 @@ class Article extends Contenu implements \JsonSerializable {
     private $ImageRepository;
     private $ImageFileName;
 
+
     public function firstXwords($nb){
         $phrase = $this->getDescription();
         $arrayWord = str_word_count($phrase,1);
