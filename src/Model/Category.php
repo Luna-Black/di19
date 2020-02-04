@@ -31,11 +31,21 @@ class Category {
 
     }
 
-    public function SqlUpdate() {
+    public function SqlUpdate(\PDO $bdd) {
+        try {
+            $requete = $bdd->prepare('UPDATE categories set Nom=:Nom');
+            $requete->execute([
+                'Nom'=> $this->getNom()
+            ]);
+            return array("0", "[OK] Update");
+        }catch (\Exception $e){
+            return array("1", "[ERREUR]".$e->getMessage());
+        }
 
     }
 
-    public function SqlGetAll() {
+    public function SqlGetAll(\PDO $bdd) {
+        $requete = $bdd->prepare()
 
     }
 }
