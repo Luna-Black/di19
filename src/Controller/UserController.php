@@ -1,6 +1,7 @@
 <?php
 namespace src\Controller;
 
+use src\Model\Bdd;
 use src\Model\User;
 
 class UserController extends  AbstractController {
@@ -76,7 +77,16 @@ class UserController extends  AbstractController {
             $user->setEmail($_POST['email']);
             $user->setRole($_POST['role']);
             $user->setValide($_POST['valide']);
+
+            $user->SqlAdd(Bdd::GetInstance());
+
         }
+        header('Location:/');
+
+    }
+
+    public function showSignUp() {
+        return $this->twig->render('User/signup.html.twig');
     }
 
     public function listAll() {
