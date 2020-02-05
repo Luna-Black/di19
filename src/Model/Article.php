@@ -18,7 +18,6 @@ class Article extends Contenu implements \JsonSerializable {
 
     public function SqlAdd(\PDO $bdd) {
         try{
-            var_dump($this->getCategorie());
             $requete = $bdd->prepare('INSERT INTO articles (Titre, Description, DateAjout, Auteur, ImageRepository, ImageFileName, Id_statuts, Id_categories) VALUES(:Titre, :Description, :DateAjout, :Auteur, :ImageRepository, :ImageFileName, :Id_statuts, :Id_categories)');
             $requete->execute([
                 "Titre" => $this->getTitre(),
