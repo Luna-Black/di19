@@ -5,11 +5,12 @@
     <div class="container-fluid mt-2">
 
         <form method="post" action="/SignUp">
-            <p>Créer votre compte : </p>
-            <p>Pseudo : <input type="text" name="pseudo"></p>
+            <h2>Créer votre compte </h2>
+            Pseudo : <input type="text" name="pseudo"></p>
             <p>Adresse e-mail : <input type="email" name="email"></p>
             <p>Mot de passe : <input type="password" name="password"></p>
-            <!--hidden role : redacteur, hiddeon valide : none -->
+            <p><input type="hidden" name="role" value="Rédacteur"></p>
+            <p><input type="hidden" name="valide" value="2"></p>
 
             <input type="submit">
         </form>
