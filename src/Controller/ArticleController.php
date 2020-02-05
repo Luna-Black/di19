@@ -24,7 +24,14 @@ class ArticleController extends AbstractController {
     }
 
     public function search($keyword) {
+        $article = new Article();
+        $articleList = $article->SqlSearch(Bdd::GetInstance(), ['Titre', 'Description', 'Id', 'Auteur'], $keyword);
 
+        return $this->twig->render(
+            'Article/search.html.twig',[
+                'articleList' => $articleList
+            ]
+        );
     }
 
     public function add(){
@@ -55,6 +62,9 @@ class ArticleController extends AbstractController {
                 ->setDateAjout($_POST['DateAjout'])
                 ->setImageRepository($sqlRepository)
                 ->setImageFileName($nomImage)
+                ->setStatut($_POST['statut'])
+                ->setCategorie($_POST['categorie'])
+
             ;
             $article->SqlAdd(BDD::getInstance());
             header('Location:/Article');
@@ -103,6 +113,8 @@ class ArticleController extends AbstractController {
                 ->setDateAjout($_POST['DateAjout'])
                 ->setImageRepository($sqlRepository)
                 ->setImageFileName($nomImage)
+                ->setStatut($_POST['statut'])
+                ->setCategorie($_POST['categorie'])
             ;
 
             $article->SqlUpdate(BDD::getInstance());

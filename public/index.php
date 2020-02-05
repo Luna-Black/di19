@@ -37,8 +37,15 @@ $router->post('/Contact/sendMail', 'Contact#sendMail');
 $router->get('/Login', 'User#loginForm');
 $router->post('/Login', 'User#loginCheck');
 $router->get('/Logout', 'User#logout');
+$router->post('/Article/Search/:keyword', 'Article#search#keyword');
+$router->get('/Admin/Categories/Delete/:id',"Category#delete#id");
+$router->get('/Admin/Categories/Update/:id','Category#update#id');
+$router->post('/Admin/Categories/Update/:id','Category#update#id');
+$router->post('/Admin/Categories/Add',"Category#add");
+$router->get('/Admin/Categories',"Category#listAll");
 $router->get('/SignUp', 'User#showSignUp');
 $router->post('/SignUp', 'User#signup');
+
 
 echo $router->run();
 
