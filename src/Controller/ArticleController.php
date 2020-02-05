@@ -4,6 +4,7 @@ namespace src\Controller;
 use src\Model\Article;
 use src\Model\Bdd;
 use DateTime;
+use src\Model\Category;
 
 class ArticleController extends AbstractController {
 
@@ -82,6 +83,8 @@ class ArticleController extends AbstractController {
     public function update($articleID){
         $articleSQL = new Article();
         $article = $articleSQL->SqlGet(BDD::getInstance(),$articleID);
+        $category= new Category();
+        $listCategory = $category->SqlGetAll(Bdd::GetInstance());
         if($_POST){
             $sqlRepository = null;
             $nomImage = null;
@@ -121,7 +124,8 @@ class ArticleController extends AbstractController {
         }
 
         return $this->twig->render('Article/update.html.twig',[
-            'article' => $article
+            'article' => $article,
+            'categories' => $listCategory
         ]);
     }
 
@@ -203,6 +207,11 @@ class ArticleController extends AbstractController {
     public function test($param1,$param2){
         var_dump($param1);
         var_dump($param2);
+    }
+
+    public function Validation($idArticle){
+        UserController::roleNeed('Administrateur');
+
     }
 
 }
