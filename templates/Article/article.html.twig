@@ -1,0 +1,13 @@
+{% extends "index.html.twig" %}
+{% block title %}{{ parent() }} - {{ article.Titre }}{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid mt-2">
+
+        <h2 class="display-3">{{ article.Titre }}</h2>
+        <hr class="my-4">
+
+    </div>
+
+{% endblock %}
