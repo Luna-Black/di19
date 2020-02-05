@@ -95,7 +95,7 @@ class Contenu {
      */
     public function setCategorie($Categorie)
     {
-        $this->Statut = $Categorie;
+        $this->Categorie = $Categorie;
         return $this;
     }
 

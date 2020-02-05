@@ -18,6 +18,7 @@ class Article extends Contenu implements \JsonSerializable {
 
     public function SqlAdd(\PDO $bdd) {
         try{
+            var_dump($this->getCategorie());
             $requete = $bdd->prepare('INSERT INTO articles (Titre, Description, DateAjout, Auteur, ImageRepository, ImageFileName, Id_statuts, Id_categories) VALUES(:Titre, :Description, :DateAjout, :Auteur, :ImageRepository, :ImageFileName, :Id_statuts, :Id_categories)');
             $requete->execute([
                 "Titre" => $this->getTitre(),
@@ -26,8 +27,8 @@ class Article extends Contenu implements \JsonSerializable {
                 "Auteur" => $this->getAuteur(),
                 "ImageRepository" => $this->getImageRepository(),
                 "ImageFileName" => $this->getImageFileName(),
-                "Id_statuts" => $this->getId_status(),
-                "Id_categories" => $this->getId_categories()
+                "Id_statuts" => $this->getStatut(),
+                "Id_categories" => $this->getCategorie()
             ]);
             return array("result"=>true,"message"=>$bdd->lastInsertId());
         }catch (\Exception $e){
@@ -96,7 +97,17 @@ class Article extends Contenu implements \JsonSerializable {
 
     public function SqlUpdate(\PDO $bdd){
         try{
-            $requete = $bdd->prepare('UPDATE articles set Titre=:Titre, Description=:Description, DateAjout=:DateAjout, Auteur=:Auteur, ImageRepository=:ImageRepository, ImageFileName=:ImageFileName WHERE id=:IDARTICLE');
+            $requete = $bdd->prepare(
+                'UPDATE articles SET
+                Titre=:Titre, 
+                Description=:Description, 
+                DateAjout=:DateAjout, 
+                Auteur=:Auteur, 
+                ImageRepository=:ImageRepository, 
+                ImageFileName=:ImageFileName, 
+                Id_categories=:Id_categories 
+                WHERE id=:IDARTICLE'
+            );
             $requete->execute([
                 'Titre' => $this->getTitre()
                 ,'Description' => $this->getDescription()
@@ -104,6 +115,7 @@ class Article extends Contenu implements \JsonSerializable {
                 ,'Auteur' => $this->getAuteur()
                 ,'ImageRepository' => $this->getImageRepository()
                 ,'ImageFileName' => $this->getImageFileName()
+                ,'IdCategories' => $this->getCategorie()
                 ,'IDARTICLE' => $this->getId()
             ]);
             return array("0", "[OK] Update");
@@ -115,11 +127,12 @@ class Article extends Contenu implements \JsonSerializable {
     public function SqlUpdateStatus(\PDO $bdd){
         try{
             $requete = $bdd->prepare(
-                'UPDATE articles SET Id_statuts=:Id_status
+                'UPDATE articles 
+                SET Id_statuts=:Id_statuts
                 WHERE Id=:IDARTICLE'
             );
             $requete->execute([
-                'Id_status' => $this->getStatut()
+                'Id_statuts' => $this->getStatut()
                 ,'IDARTICLE' => $this->getId()
             ]);
             return array("0", "[OK] Update");
