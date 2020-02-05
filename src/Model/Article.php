@@ -71,7 +71,9 @@ class Article extends Contenu implements \JsonSerializable {
         $article->setImageFileName($datas['ImageFileName']);
 
         return $article;
+    }
 
+    public function SqlSearch(\PDO $bdd, $keyword){
 
     }
 

@@ -66,4 +66,16 @@ class UserController extends  AbstractController {
         header('Location:/');
     }
 
+    public function signup(){
+
+    }
+
+    public function listAll() {
+
+    }
+
+    public function update() {
+
+    }
+
 }
