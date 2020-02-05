@@ -28,7 +28,7 @@ class ArticleController extends AbstractController {
     }
 
     public function add(){
-        UserController::roleNeed('redacteur');
+        UserController::roleNeed('Rédacteur');
         if($_POST AND $_SESSION['token'] == $_POST['token']){
             $sqlRepository = null;
             $nomImage = null;

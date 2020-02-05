@@ -6,6 +6,7 @@ use src\Model\Bdd;
 class CategoryController extends AbstractController {
 
     public function add() {
+        UserController::roleNeed('')
 
     }
 
