@@ -37,7 +37,8 @@ class Article extends Contenu implements \JsonSerializable {
 
     public function SqlGetAll(\PDO $bdd){
             $requete = $bdd->prepare(
-                'SELECT * FROM articles
+                'SELECT articles.Id as articleID, Titre, Auteur, Description, DateAjout, ImageRepository, ImageFileName, statuts.Nom as statut, categories.Nom as categorie
+                FROM articles
                 INNER JOIN statuts on articles.Id_statuts = statuts.Id
                 INNER JOIN categories on articles.Id_categories = categories.Id'
             );
@@ -47,17 +48,15 @@ class Article extends Contenu implements \JsonSerializable {
             $listArticle = [];
             foreach ($arrayArticle as $articleSQL){
                 $article = new Article();
-                $article->setId($articleSQL['articles.Id']);
+                $article->setId($articleSQL['articleID']);
                 $article->setTitre($articleSQL['Titre']);
                 $article->setAuteur($articleSQL['Auteur']);
                 $article->setDescription($articleSQL['Description']);
                 $article->setDateAjout($articleSQL['DateAjout']);
                 $article->setImageRepository($articleSQL['ImageRepository']);
                 $article->setImageFileName($articleSQL['ImageFileName']);
-                $article->setStatut($articleSQL['Id_statuts']);
-                $article->setCategorie($articleSQL['Id_categories']);
-                $article->setStatut($articleSQL['statuts.Nom']);
-                $article->setCategorie($articleSQL['categories.Nom']);
+                $article->setStatut($articleSQL['statut']);
+                $article->setCategorie($articleSQL['categorie']);
 
                 $listArticle[] = $article;
             }
@@ -65,7 +64,8 @@ class Article extends Contenu implements \JsonSerializable {
     }
     public function SqlGet(\PDO $bdd,$idArticle){
         $requete = $bdd->prepare(
-            'SELECT * FROM articles
+            'SELECT articles.Id as articleID, Titre, Auteur, Description, DateAjout, ImageRepository, ImageFileName, statuts.Nom as statut, categories.Nom as categorie
+            FROM articles
             INNER JOIN statuts on articles.Id_statuts = statuts.Id
             INNER JOIN categories on articles.Id_categories = categories.Id
             WHERE articles.Id = :idArticle'
@@ -77,15 +77,15 @@ class Article extends Contenu implements \JsonSerializable {
         $datas =  $requete->fetch();
 
         $article = new Article();
-        $article->setId($datas['articles.Id']);
+        $article->setId($datas['articleID']);
         $article->setTitre($datas['Titre']);
         $article->setAuteur($datas['Auteur']);
         $article->setDescription($datas['Description']);
         $article->setDateAjout($datas['DateAjout']);
         $article->setImageRepository($datas['ImageRepository']);
         $article->setImageFileName($datas['ImageFileName']);
-        $article->setStatut($datas['statuts.Nom']);
-        $article->setCategorie($datas['categories.Nom']);
+        $article->setStatut($datas['statut']);
+        $article->setCategorie($datas['categorie']);
 
         return $article;
     }
@@ -97,7 +97,8 @@ class Article extends Contenu implements \JsonSerializable {
         }
         $conditions = implode('OR ', $conditionsArray);
         $requete = $bdd->prepare(
-            'SELECT * FROM articles
+            'SELECT articles.Id as articleID, Titre, Auteur, Description, DateAjout, ImageRepository, ImageFileName, statuts.Nom as statut, categories.Nom as categorie
+            FROM articles
             INNER JOIN statuts on articles.Id_statuts = statuts.Id
             INNER JOIN categories on articles.Id_categories = categories.Id
             WHERE '.$conditions
@@ -105,22 +106,22 @@ class Article extends Contenu implements \JsonSerializable {
         $requete->execute();
         $articlesArray = $requete->fetchAll();
 
-        $ArticlesList = [];
+        $articlesList = [];
         foreach($articlesArray as $SQLArticle){
             $article = new Article();
-            $article->setId($SQLArticle['articles.Id']);
+            $article->setId($SQLArticle['articleID']);
             $article->setTitre($SQLArticle['Titre']);
             $article->setAuteur($SQLArticle['Auteur']);
             $article->setDescription($SQLArticle['Description']);
             $article->setDateAjout($SQLArticle['DateAjout']);
             $article->setImageRepository($SQLArticle['ImageRepository']);
             $article->setImageFileName($SQLArticle['ImageFileName']);
-            $article->setStatut($SQLArticle['statuts.Nom']);
-            $article->setCategorie($SQLArticle['categories.Nom']);
+            $article->setStatut($SQLArticle['statut']);
+            $article->setCategorie($SQLArticle['categorie']);
 
-            $ArticlesList[] = $article;
+            $articlesList[] = $article;
         }
-        return $ArticlesList;
+        return $articlesList;
     }
 
     public function SqlUpdate(\PDO $bdd){

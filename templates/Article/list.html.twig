@@ -14,6 +14,7 @@
             <th scope="col">Titre</th>
             <th scope="col">Auteur</th>
             <th scope="col">Date</th>
+            <th scope="col">Catégorie</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -24,6 +25,7 @@
                 <td>{{ article.Titre }}</td>
                 <td>{{ article.Auteur }}</td>
                 <td>{{ article.DateAjout | date("d/m/Y") }}</td>
+                <td>{{ article.Categorie }}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a class="btn btn-success" href="/Article/Show/{{ article.id }}"><i class="far fa-eye"></i></a>
