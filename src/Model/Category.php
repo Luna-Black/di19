@@ -20,9 +20,9 @@ class Category {
 
     public function SqlDelete(\PDO $bdd,$idCategory) {
         try {
-            $requete = $bdd->prepare('DELETE FROM categories where Id = :idCategory');
+            $requete = $bdd->prepare('DELETE FROM categories where Id = :idCategorie');
             $requete ->execute([
-                'idCategory'=>$idCategory
+                'idCategorie'=>$idCategory
             ]);
             return true;
         }catch (\Exception $e){
@@ -59,6 +59,24 @@ class Category {
         }
         return $listCategory;
 
+    }
+
+    public function SqlGet(\PDO $bdd,$idCategory){
+        $requete = $bdd->prepare(
+            'SELECT * FROM categories
+            WHERE categories.Id = :idCategorie'
+        );
+        $requete->execute([
+            'idCategorie' => $idCategory
+        ]);
+
+        $datas = $requete->fetch();
+
+        $categorie = new Category();
+        $categorie->setId($datas['Id']);
+        $categorie->setNom($datas['Nom']);
+
+        return $categorie;
     }
 
     /**

@@ -19,15 +19,30 @@ class CategoryController extends AbstractController {
 
     public function delete($categoryID) {
         $categorySQL = new Category();
-        //$category = $categorySQL->
+        $category = $categorySQL->SqlGet(Bdd::GetInstance(),$categoryID);
+        $category->SqlDelete(Bdd::GetInstance(),$categoryID);
 
+        header('location/Admin/Category');
     }
 
-    public function update() {
 
+    public function update($categoryID) {
+        $categorySQL = new Category();
+        $category = $categorySQL->SqlGet(Bdd::GetInstance(),$categoryID);
+        if($_POST){
+            $category->setNom($_POST['Nom']);
+            $category->SqlUpdate(Bdd::GetInstance());
+        }
+        header('location/Admin/Category');
     }
 
     public function listAll() {
+        $category = new Category();
+        $listCategory = $category->SqlGetAll(Bdd::GetInstance());
+
+        return $this->twig->render('Article/category.html.twig',[
+                   'categorie'=>$listCategory
+        ]);
 
     }
 }
