@@ -33,7 +33,9 @@ class CategoryController extends AbstractController {
             $category->setNom($_POST['Nom']);
             $category->SqlUpdate(Bdd::GetInstance());
         }
-        header('location/Admin/Category');
+        return $this->twig->render('Article/catupdate.html.twig',[
+            'category'=>$category
+        ]);
     }
 
     public function listAll() {
