@@ -1,6 +1,8 @@
 <?php
 namespace src\Controller;
 
+use src\Model\User;
+
 class UserController extends  AbstractController {
 
     public function loginForm(){
@@ -67,7 +69,14 @@ class UserController extends  AbstractController {
     }
 
     public function signup(){
-
+        if($_POST){
+            $user = new User();
+            $user->setPseudo($_POST['pseudo']);
+            $user->setPassword($_POST['password']);
+            $user->setEmail($_POST['email']);
+            $user->setRole($_POST['role']);
+            $user->setValide($_POST['valide']);
+        }
     }
 
     public function listAll() {
