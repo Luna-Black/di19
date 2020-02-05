@@ -62,6 +62,9 @@ class ArticleController extends AbstractController {
                 ->setDateAjout($_POST['DateAjout'])
                 ->setImageRepository($sqlRepository)
                 ->setImageFileName($nomImage)
+                ->setStatut($_POST['statut'])
+                ->setCategorie($_POST['categorie'])
+
             ;
             $article->SqlAdd(BDD::getInstance());
             header('Location:/Article');
@@ -110,6 +113,8 @@ class ArticleController extends AbstractController {
                 ->setDateAjout($_POST['DateAjout'])
                 ->setImageRepository($sqlRepository)
                 ->setImageFileName($nomImage)
+                ->setStatut($_POST['statut'])
+                ->setCategorie($_POST['categorie'])
             ;
 
             $article->SqlUpdate(BDD::getInstance());
