@@ -47,17 +47,17 @@ class Category {
     public function SqlGetAll(\PDO $bdd) {
         $requete = $bdd->prepare('SELECT * FROM categories');
         $requete->execute();
-        $arrayCategories = $requete->fetchAll();
+        $arrayCategory = $requete->fetchAll();
 
-        $listCategories = [];
-        foreach ($arrayCategories as $categorieSQL){
-            $categorie = new Category();
-            $categorie->setId($categorieSQL['Id']);
-            $categorie->setNom($categorieSQL['Nom']);
+        $listCategory = [];
+        foreach ($arrayCategory as $categorySQL){
+            $category = new Category();
+            $category->setId($categorySQL['Id']);
+            $category->setNom($categorySQL['Nom']);
 
-            $listCategories[] = $categorie;
+            $listCategory[] = $category;
         }
-        return $listCategories;
+        return $listCategory;
 
     }
 
