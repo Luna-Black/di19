@@ -78,10 +78,13 @@ class UserController extends  AbstractController {
             $user->setRole($_POST['role']);
             $user->setValide($_POST['valide']);
 
-            $user->SqlAdd(Bdd::GetInstance());
+            var_dump($user->SqlAdd(Bdd::GetInstance()));
+
+
+
 
         }
-        header('Location:/');
+       header('Location:/');
 
     }
 
