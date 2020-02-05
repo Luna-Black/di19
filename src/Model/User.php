@@ -13,12 +13,12 @@ class User {
 
     public function SqlAdd(\PDO $bdd) {
         try{
-            $requete = $bdd->prepare('INSERT INTO utilisateur (Pseudo,Email,MDP,Role,Valide) VALUES (:Pseudo,:Email,:MDP,:Role,:Valide)');
+            $requete = $bdd->prepare('INSERT INTO utilisateurs (Pseudo,Email,Mdp,Valide) VALUES (:Pseudo,:Email,:Mdp,:Valide)');
             $requete->execute([
                 "Email"=>$this->getEmail(),
                 "MDP"=>$this->getPassword(),
                 "Pseudo"=>$this->getPseudo(),
-                "Role"=>$this->getRole(),
+                "Id_roles"=>$this->getRole(),
                 "Valide"=>$this->getValide()
 
             ]);
