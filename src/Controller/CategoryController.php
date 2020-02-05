@@ -18,6 +18,7 @@ class CategoryController extends AbstractController {
     }
 
     public function delete($categoryID) {
+        UserController::roleNeed('Administrateur');
         $categorySQL = new Category();
         $category = $categorySQL->SqlGet(Bdd::GetInstance(),$categoryID);
         $category->SqlDelete(Bdd::GetInstance(),$categoryID);
@@ -27,6 +28,7 @@ class CategoryController extends AbstractController {
 
 
     public function update($categoryID) {
+        UserController::roleNeed('Administrateur');
         $categorySQL = new Category();
         $category = $categorySQL->SqlGet(Bdd::GetInstance(),$categoryID);
         if($_POST){
@@ -39,6 +41,7 @@ class CategoryController extends AbstractController {
     }
 
     public function listAll() {
+        UserController::roleNeed('Administrateur');
         $category = new Category();
         $listCategory = $category->SqlGetAll(Bdd::GetInstance());
 
