@@ -18,7 +18,7 @@ class Article extends Contenu implements \JsonSerializable {
 
     public function SqlAdd(\PDO $bdd) {
         try{
-            $requete = $bdd->prepare('INSERT INTO articles (Titre, Description, DateAjout, Auteur, ImageRepository, ImageFileName) VALUES(:Titre, :Description, :DateAjout, :Auteur, :ImageRepository, :ImageFileName)');
+            $requete = $bdd->prepare('INSERT INTO articles (Titre, Description, DateAjout, Auteur, ImageRepository, ImageFileName, Id_statuts, Id_categories) VALUES(:Titre, :Description, :DateAjout, :Auteur, :ImageRepository, :ImageFileName, :Id_statuts, :Id_categories)');
             $requete->execute([
                 "Titre" => $this->getTitre(),
                 "Description" => $this->getDescription(),
@@ -26,16 +26,21 @@ class Article extends Contenu implements \JsonSerializable {
                 "Auteur" => $this->getAuteur(),
                 "ImageRepository" => $this->getImageRepository(),
                 "ImageFileName" => $this->getImageFileName(),
+                "Id_statuts" => $this->getId_status(),
+                "Id_categories" => $this->getId_categories()
             ]);
             return array("result"=>true,"message"=>$bdd->lastInsertId());
         }catch (\Exception $e){
             return array("result"=>false,"message"=>$e->getMessage());
         }
-
     }
 
     public function SqlGetAll(\PDO $bdd){
-            $requete = $bdd->prepare('SELECT * FROM articles');
+            $requete = $bdd->prepare(
+                'SELECT * FROM articles
+                INNER JOIN statuts on articles.Id_statuts = statuts.Id
+                INNER JOIN categories on articles.Id_categories = categories.Id'
+            );
             $requete->execute();
             $arrayArticle = $requete->fetchAll();
 
@@ -49,13 +54,22 @@ class Article extends Contenu implements \JsonSerializable {
                 $article->setDateAjout($articleSQL['DateAjout']);
                 $article->setImageRepository($articleSQL['ImageRepository']);
                 $article->setImageFileName($articleSQL['ImageFileName']);
+                $article->setStatut($articleSQL['Id_statuts']);
+                $article->setCategorie($articleSQL['Id_categories']);
+                $article->setStatut($articleSQL['statuts.Nom']);
+                $article->setCategorie($articleSQL['categories.Nom']);
 
                 $listArticle[] = $article;
             }
             return $listArticle;
     }
     public function SqlGet(\PDO $bdd,$idArticle){
-        $requete = $bdd->prepare('SELECT * FROM articles where Id = :idArticle');
+        $requete = $bdd->prepare(
+            'SELECT * FROM articles
+            INNER JOIN statuts on articles.Id_statuts = statuts.Id
+            INNER JOIN categories on articles.Id_categories = categories.Id
+            WHERE articles.Id = :idArticle'
+        );
         $requete->execute([
             'idArticle' => $idArticle
         ]);
@@ -70,6 +84,8 @@ class Article extends Contenu implements \JsonSerializable {
         $article->setDateAjout($datas['DateAjout']);
         $article->setImageRepository($datas['ImageRepository']);
         $article->setImageFileName($datas['ImageFileName']);
+        $article->setStatut($datas['statuts.Nom']);
+        $article->setCategorie($datas['categories.Nom']);
 
         return $article;
     }
@@ -88,6 +104,22 @@ class Article extends Contenu implements \JsonSerializable {
                 ,'Auteur' => $this->getAuteur()
                 ,'ImageRepository' => $this->getImageRepository()
                 ,'ImageFileName' => $this->getImageFileName()
+                ,'IDARTICLE' => $this->getId()
+            ]);
+            return array("0", "[OK] Update");
+        }catch (\Exception $e){
+            return array("1", "[ERREUR] ".$e->getMessage());
+        }
+    }
+
+    public function SqlUpdateStatus(\PDO $bdd){
+        try{
+            $requete = $bdd->prepare(
+                'UPDATE articles SET Id_statuts=:Id_status
+                WHERE Id=:IDARTICLE'
+            );
+            $requete->execute([
+                'Id_status' => $this->getStatut()
                 ,'IDARTICLE' => $this->getId()
             ]);
             return array("0", "[OK] Update");
