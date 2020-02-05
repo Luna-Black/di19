@@ -1,5 +1,7 @@
 <?php
 namespace src\Controller;
+use src\Model\Category;
+use src\Model\Bdd;
 
 class CategoryController extends AbstractController {
 
