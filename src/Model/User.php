@@ -4,22 +4,19 @@ namespace src\Model;
 class User {
     private $Id;
     private $Email;
-    private $Password;
-    private $Name;
+    private $Mdp;
+    private $Pseudo;
     private $Role;
-    private $Valide;
 
 
 
     public function SqlAdd(\PDO $bdd) {
         try{
-            $requete = $bdd->prepare('INSERT INTO utilisateurs (Pseudo,Email,Mdp,Valide,Id_roles) VALUES (:Pseudo,:Email,:Mdp,:Valide,2)');
+            $requete = $bdd->prepare('INSERT INTO utilisateurs (Pseudo,Email,Mdp,Id_roles) VALUES (:Pseudo,:Email,:Mdp,:Valide,3)');
             $requete->execute([
                 "Email"=>$this->getEmail(),
-                "Mdp"=>$this->getPassword(),
+                "Mdp"=>$this->getMdp(),
                 "Pseudo"=>$this->getPseudo(),
-                "Valide"=>$this->getValide()
-
             ]);
             return array("result"=>true,"message"=>$bdd->lastInsertId());
         }catch (\Exception $e){
@@ -37,6 +34,28 @@ class User {
 
     public function SqlGetAll() {
 
+    }
+
+    public function SqlGet(\PDO $bdd) {
+        $requete = $bdd->prepare(
+            'SELECT utilisateurs.Id as UserID, Pseudo, Mdp, Email, roles.Nom as role FROM utilisateurs
+            INNER JOIN roles on utilisateurs.Id_roles = roles.Id
+            WHERE Email = :email'
+        );
+        $requete->execute([
+            "email" => $this->getEmail()
+        ]);
+
+        $data = $requete->fetch();
+
+        $user = new User();
+        $user->setId($data['UserID']);
+        $user->setPseudo($data['Pseudo']);
+        $user->setMdp($data['Mdp']);
+        $user->setEmail($data['Email']);
+        $user->setRole($data['role']);
+
+        return $user;
     }
 
     /**
@@ -74,17 +93,17 @@ class User {
     /**
      * @return mixed
      */
-    public function getPassword()
+    public function getMdp()
     {
-        return $this->Password;
+        return $this->Mdp;
     }
 
     /**
-     * @param mixed $Password
+     * @param mixed $Mdp
      */
-    public function setPassword($Password)
+    public function setMdp($Mdp)
     {
-        $this->Password = $Password;
+        $this->Mdp = $Mdp;
     }
 
     /**
@@ -92,15 +111,15 @@ class User {
      */
     public function getPseudo()
     {
-        return $this->Name;
+        return $this->Pseudo;
     }
 
     /**
-     * @param mixed $Name
+     * @param mixed $Pseudo
      */
-    public function setPseudo($Name)
+    public function setPseudo($Pseudo)
     {
-        $this->Name = $Name;
+        $this->Pseudo = $Pseudo;
     }
 
     /**

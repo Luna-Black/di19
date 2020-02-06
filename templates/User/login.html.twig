@@ -7,7 +7,9 @@
             <div class="alert alert-danger">{{ session.errorlogin }}</div>
         {% endif %}
         <form method="post" action="/Login">
+            <label for="email">Email</label>
             <input type="email" name="email">
+            <label for="password">Mot de passe</label>
             <input type="password" name="password">
             <input type="submit">
         </form>
