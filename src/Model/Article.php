@@ -91,6 +91,38 @@ class Article extends Contenu implements \JsonSerializable {
         return $article;
     }
 
+    public function SqlGetByStatus(\PDO $bdd, $statusID) {
+        $requete = $bdd->prepare(
+            'SELECT articles.Id as articleID, Titre, Auteur, Description, DateAjout, ImageRepository, ImageFileName, statuts.Nom as statut, categories.Nom as categorie
+                FROM articles
+                INNER JOIN statuts on articles.Id_statuts = statuts.Id
+                INNER JOIN categories on articles.Id_categories = categories.Id
+                WHERE statuts.Id=:status
+                ORDER BY articleID ASC'
+        );
+        $requete->execute([
+            'status' => $statusID
+        ]);
+        $arrayArticle = $requete->fetchAll();
+
+        $listArticle = [];
+        foreach ($arrayArticle as $articleSQL){
+            $article = new Article();
+            $article->setId($articleSQL['articleID']);
+            $article->setTitre($articleSQL['Titre']);
+            $article->setAuteur($articleSQL['Auteur']);
+            $article->setDescription($articleSQL['Description']);
+            $article->setDateAjout($articleSQL['DateAjout']);
+            $article->setImageRepository($articleSQL['ImageRepository']);
+            $article->setImageFileName($articleSQL['ImageFileName']);
+            $article->setStatut($articleSQL['statut']);
+            $article->setCategorie($articleSQL['categorie']);
+
+            $listArticle[] = $article;
+        }
+        return $listArticle;
+    }
+
     public function SqlSearch(\PDO $bdd, array $fields, $keyword){
         $conditionsArray = [];
         foreach($fields as $field){

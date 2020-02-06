@@ -24,6 +24,18 @@ class ArticleController extends AbstractController {
         );
     }
 
+    public function listByStatus($status){
+        $article = new Article();
+        $listArticle = $article->SqlGetByStatus(Bdd::GetInstance(), $status);
+
+        return $this->twig->render(
+            'Article/admin.html.twig',[
+                'articleList' => $listArticle,
+                'status' => $status
+            ]
+        );
+    }
+
     public function show($articleID){
         $SQLArticle = new Article();
         $article = $SQLArticle->SqlGet(Bdd::GetInstance(), $articleID);
@@ -137,6 +149,16 @@ class ArticleController extends AbstractController {
             'article' => $article,
             'categories' => $listCategory
         ]);
+    }
+
+    public function updateStatus($articleID, $statusID) {
+        $articleSQL = new Article();
+        $article = $articleSQL->SqlGet(BDD::getInstance(),$articleID);
+
+        $article->setStatut($statusID);
+
+        $article->SqlUpdateStatus(BDD::getInstance());
+        header('Location:/Admin/2');
     }
 
     public function Delete($articleID){
