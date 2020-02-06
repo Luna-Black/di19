@@ -24,26 +24,41 @@ class User {
         }
     }
 
-
-
-
-
     public function SqlUpdate() {
 
     }
 
-    public function SqlGetAll() {
+    public function SqlGetAll(\PDO $bdd) {
+        $requete = $bdd->prepare(
+            'SELECT utilisateurs.Id as userID, Pseudo, Mdp, Email, roles.Nom as role 
+            FROM utilisateurs
+            INNER JOIN roles on utilisateurs.Id_roles = roles.Id
+            ORDER BY userID ASC'
+        );
+        $requete->execute();
+        $usersArray = $requete->fetchAll();
 
+        $usersList = [];
+        foreach ($usersArray as $SQLUser){
+            $user = new User();
+            $user->setId($SQLUser['userID']);
+            $user->setPseudo($SQLUser['Pseudo']);
+            $user->setEmail($SQLUser['Email']);
+            $user->setRole($SQLUser['role']);
+
+            $usersList[] = $user;
+        }
+        return $usersList;
     }
 
-    public function SqlGet(\PDO $bdd) {
+    public function SqlGet(\PDO $bdd, $email) {
         $requete = $bdd->prepare(
             'SELECT utilisateurs.Id as UserID, Pseudo, Mdp, Email, roles.Nom as role FROM utilisateurs
             INNER JOIN roles on utilisateurs.Id_roles = roles.Id
-            WHERE Email = :email'
+            WHERE Email=:email'
         );
         $requete->execute([
-            "email" => $this->getEmail()
+            "email" => $email
         ]);
 
         $data = $requete->fetch();
@@ -56,6 +71,31 @@ class User {
         $user->setRole($data['role']);
 
         return $user;
+    }
+
+
+    public function SqlUpdateRole(\PDO $bdd) {
+        $requete = $bdd->prepare(
+            'SELECT Id from roles
+            WHERE roles.Nom = :role'
+        );
+        $requete->execute([
+            'role' => $this->getRole()
+        ]);
+        $SQLRole = $requete->fetch();
+        try{
+            $requete = $bdd->prepare(
+                'UPDATE utilisateurs SET Id_roles=:roleID  
+                WHERE Email=:email'
+            );
+            $requete->execute([
+                'email' => $this->getEmail(),
+                'roleID' => $SQLRole['Id']
+            ]);
+            return array("0", "[OK] Update");
+        }catch (\Exception $e){
+            return array("1", "[ERREUR] ".$e->getMessage());
+        }
     }
 
     /**
