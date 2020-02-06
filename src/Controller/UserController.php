@@ -1,6 +1,7 @@
 <?php
 namespace src\Controller;
 
+use src\Model\Article;
 use src\Model\Bdd;
 use src\Model\User;
 
@@ -74,25 +75,29 @@ class UserController extends  AbstractController {
             $user->setPseudo($_POST['pseudo']);
             $user->setPassword($_POST['password']);
             $user->setEmail($_POST['email']);
-            $user->setRole($_POST['role']);
-            $user->setValide($_POST['valide']);
+            }
 
-            var_dump($user->SqlAdd(Bdd::GetInstance()));
+      header('Location:/');
 
-
-
-
-        }
-       header('Location:/');
 
     }
+
 
     public function showSignUp() {
         return $this->twig->render('User/signup.html.twig');
     }
 
-    public function listAll() {
 
+    public function listAll() {
+        $user = new User();
+        $listUser= $user->SqlGetAll(Bdd::GetInstance());
+
+        //Lancer la vue TWIG
+        return $this->twig->render(
+            'User/user.html.twig',[
+                'articleUser' => $listUser
+            ]
+        );
     }
 
     public function update() {
