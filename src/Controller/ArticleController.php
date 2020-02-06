@@ -47,7 +47,7 @@ class ArticleController extends AbstractController {
     }
 
     public function add(){
-        UserController::roleNeed('Rédacteur');
+        UserController::checkRoles(['Rédacteur','Administrateur']);
         if($_POST AND $_SESSION['token'] == $_POST['token']){
             $sqlRepository = null;
             $nomImage = null;
@@ -127,7 +127,6 @@ class ArticleController extends AbstractController {
                 ->setDateAjout($_POST['DateAjout'])
                 ->setImageRepository($sqlRepository)
                 ->setImageFileName($nomImage)
-                //->setStatut($_POST['statut'])
                 ->setCategorie($_POST['categorie'])
             ;
 
@@ -221,7 +220,7 @@ class ArticleController extends AbstractController {
     }
 
     public function Validation($idArticle){
-        UserController::roleNeed('Administrateur');
+        UserController::checkRoles(['Administrateur']);
 
     }
 

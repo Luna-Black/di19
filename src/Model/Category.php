@@ -33,9 +33,10 @@ class Category {
 
     public function SqlUpdate(\PDO $bdd) {
         try {
-            $requete = $bdd->prepare('UPDATE categories set Nom=:Nom');
+            $requete = $bdd->prepare('UPDATE categories set Nom=:Nom WHERE Id=:IdCategory');
             $requete->execute([
-                'Nom'=> $this->getNom()
+                'Nom'=> $this->getNom(),
+                'IdCategory'=> $this->getId()
             ]);
             return array("0", "[OK] Update");
         }catch (\Exception $e){

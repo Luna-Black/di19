@@ -1,19 +1,60 @@
 <?php
 namespace src\Controller;
 
-use src\Model\Article;
 use src\Model\Bdd;
 use src\Model\User;
 
 class UserController extends  AbstractController {
+
+    public function listAll() {
+        $user = new User();
+        $usersList = $user->SqlGetAll(Bdd::GetInstance());
+
+        //Lancer la vue TWIG
+        return $this->twig->render(
+            'User/users.html.twig',[
+                'usersList' => $usersList
+            ]
+        );
+    }
+
+    public function updateRole($email) {
+        $SQLUser = new User();
+        $user = $SQLUser->SqlGet(Bdd::GetInstance(), $email);
+
+        if($_POST) {
+            $user->setRole($_POST['role']);
+            $user->SqlUpdateRole(Bdd::GetInstance());
+        }
+        header('Location:/Admin/Users');
+    }
 
     public function loginForm(){
         return $this->twig->render('User/login.html.twig');
     }
 
     public function loginCheck(){
+        $SQLUser = new User();
+        $user = $SQLUser->SqlGet(Bdd::GetInstance(), $_POST['email']);
+        var_dump($_POST);
+        var_dump($user);
+        if($_POST['password'] == $user->getMdp() and $_POST['email'] != ''){
+            var_dump('test');
+            unset($_SESSION['errorlogin']);
+            $_SESSION['login'] = array(
+                'Pseudo' => $user->getPseudo(),
+                'Email' => $user->getEmail(),
+                'Role' => $user->getRole()
+            );
+            header('Location:/');
+        }else{
+            $_SESSION['errorlogin'] = 'Erreur Authent.';
+            header('Location:/Login');
+        }
+    }
 
-        if(!filter_var(
+
+        /*if(!filter_var(
             $_POST['password'],
             FILTER_VALIDATE_REGEXP,
             array(
@@ -44,17 +85,13 @@ class UserController extends  AbstractController {
         }else{
             $_SESSION['errorlogin'] = "Erreur Authent.";
             header('Location:/Login');
-        }
+        }*/
 
-
-
-    }
-
-    public static function roleNeed($roleATester){
+    public static function checkRoles(array $testedRoles){
         if(isset($_SESSION['login'])){
-            if(!in_array($roleATester,$_SESSION['login']['roles'])){
-                $_SESSION['errorlogin'] = "Manque le role : ".$roleATester;
-                header('Location:/Contact');
+            if(!in_array($_SESSION['login']['role'], $testedRoles)){
+                $_SESSION['errorlogin'] = "Vous n'avez pas les droits";
+                header('Location:/Login');
             }
         }else{
             $_SESSION['errorlogin'] = "Veuillez vous identifier";
@@ -73,31 +110,16 @@ class UserController extends  AbstractController {
         if($_POST){
             $user = new User();
             $user->setPseudo($_POST['pseudo']);
-            $user->setPassword($_POST['password']);
+            $user->setMdp($_POST['password']);
             $user->setEmail($_POST['email']);
             }
 
       header('Location:/');
 
-
     }
-
 
     public function showSignUp() {
         return $this->twig->render('User/signup.html.twig');
-    }
-
-
-    public function listAll() {
-        $user = new User();
-        $listUser= $user->SqlGetAll(Bdd::GetInstance());
-
-        //Lancer la vue TWIG
-        return $this->twig->render(
-            'User/user.html.twig',[
-                'articleUser' => $listUser
-            ]
-        );
     }
 
     public function update() {

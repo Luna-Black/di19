@@ -44,6 +44,9 @@ $router->get('/Admin/Categories/Update/:id','Category#update#id');
 $router->post('/Admin/Categories/Update/:id','Category#update#id');
 $router->post('/Admin/Categories/Add',"Category#add");
 $router->get('/Admin/Categories',"Category#listAll");
+$router->post('/Admin/Categories',"Category#listAll");
+$router->get('Admin/Users', "User#listAll");
+$router->post('/Admin/Users/UpdateRole/:id', 'User#updateRole#id');
 $router->get('/SignUp', 'User#showSignUp');
 $router->post('/SignUp', 'User#signup');
 
