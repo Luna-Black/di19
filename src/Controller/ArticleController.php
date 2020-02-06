@@ -4,6 +4,7 @@ namespace src\Controller;
 use src\Model\Article;
 use src\Model\Bdd;
 use DateTime;
+use src\Model\Category;
 
 class ArticleController extends AbstractController {
 
@@ -23,8 +24,26 @@ class ArticleController extends AbstractController {
         );
     }
 
-    public function search($keyword) {
+    public function show($articleID){
+        $SQLArticle = new Article();
+        $article = $SQLArticle->SqlGet(Bdd::GetInstance(), $articleID);
+        return $this->twig->render(
+            'Article/article.html.twig',[
+                'article' => $article
+            ]
+        );
+    }
 
+    public function search($keyword) {
+        $article = new Article();
+        $articleList = $article->SqlSearch(Bdd::GetInstance(), ['Titre', 'Description', 'Id', 'Auteur'], $keyword);
+
+        return $this->twig->render(
+            'Article/search.html.twig',[
+                'articleList' => $articleList,
+                'keyword' => $keyword
+            ]
+        );
     }
 
     public function add(){
@@ -55,6 +74,9 @@ class ArticleController extends AbstractController {
                 ->setDateAjout($_POST['DateAjout'])
                 ->setImageRepository($sqlRepository)
                 ->setImageFileName($nomImage)
+                ->setStatut($_POST['statut'])
+                ->setCategorie($_POST['categorie'])
+
             ;
             $article->SqlAdd(BDD::getInstance());
             header('Location:/Article');
@@ -72,6 +94,8 @@ class ArticleController extends AbstractController {
     public function update($articleID){
         $articleSQL = new Article();
         $article = $articleSQL->SqlGet(BDD::getInstance(),$articleID);
+        $category= new Category();
+        $listCategory = $category->SqlGetAll(Bdd::GetInstance());
         if($_POST){
             $sqlRepository = null;
             $nomImage = null;
@@ -103,13 +127,16 @@ class ArticleController extends AbstractController {
                 ->setDateAjout($_POST['DateAjout'])
                 ->setImageRepository($sqlRepository)
                 ->setImageFileName($nomImage)
+                //->setStatut($_POST['statut'])
+                ->setCategorie($_POST['categorie'])
             ;
 
             $article->SqlUpdate(BDD::getInstance());
         }
 
         return $this->twig->render('Article/update.html.twig',[
-            'article' => $article
+            'article' => $article,
+            'categories' => $listCategory
         ]);
     }
 
@@ -191,6 +218,11 @@ class ArticleController extends AbstractController {
     public function test($param1,$param2){
         var_dump($param1);
         var_dump($param2);
+    }
+
+    public function Validation($idArticle){
+        UserController::roleNeed('Administrateur');
+
     }
 
 }
