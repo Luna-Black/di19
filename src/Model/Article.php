@@ -180,7 +180,7 @@ class Article extends Contenu implements \JsonSerializable {
                 ,'Auteur' => $this->getAuteur()
                 ,'ImageRepository' => $this->getImageRepository()
                 ,'ImageFileName' => $this->getImageFileName()
-                ,'IdCategories' => $this->getCategorie()
+                ,'Id_categories' => $this->getCategorie()
                 ,'IDARTICLE' => $this->getId()
             ]);
             return array("0", "[OK] Update");
