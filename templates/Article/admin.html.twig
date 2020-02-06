@@ -2,15 +2,53 @@
 {% block title %}{{ parent() }} - Administration {% endblock %}
 
 {% block body %}
-    <div>
-        <H2>Accéder aux articles</H2>
-
-    <div class="container-fluid mt-2">
-        <h2 class="display-3">Administration</h2>
-
+    <div class="jumbotron">
+        <h1 class="display-4">Liste des articles {% if status == 1 %}en ligne{% endif %}{% if status == 2 %}en attente{% endif %}{% if status == 3 %}refusés{% endif %}</h1>
     </div>
+    <div>
+        <ul>
+            <li>
+                <a href="/Admin/2">Articles en attente</a>
+            </li>
+            <li>
+                <a href="/Admin/1">Articles en ligne</a>
+            </li>
+            <li>
+                <a href="/Admin/3">Articles refusés</a>
+            </li>
+        </ul>
+    </div>
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Titre</th>
+                <th scope="col">Auteur</th>
+                <th scope="col">Date</th>
+                <th scope="col">Catégorie</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for article in articleList %}
+                <tr>
+                    <th scope="row"><a href="/Article/Show/{{ article.id }}">#{{ article.id }}</a></th>
+                    <td>{{ article.Titre }}</td>
+                    <td>{{ article.Auteur }}</td>
+                    <td>{{ article.DateAjout | date("d/m/Y") }}</td>
+                    <td>{{ article.Categorie }}</td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <a class="btn btn-primary" href="/Article/Show/{{ article.Id }}"><i class="far fa-eye"></i></a>
+                            <a class="btn btn-success" href="/Admin/Article/Status/{{ article.Id }}/1/"><i class="fas fa-check"></i></a>
+                            <a class="btn btn-danger" href="/Admin/Article/Status/{{ article.Id }}/3"><i class="fa fa-times"></i></a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
 
-    <H2>Accéder aux catégories</H2>
-    <H2>Accéder aux utilisateurs</H2>
-   <!-- <H2>Editer le CSS</H2> -->
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
