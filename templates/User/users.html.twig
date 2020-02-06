@@ -1,0 +1,44 @@
+{% extends "index.html.twig" %}
+{% block title %} Liste des membres - {{ parent() }}{% endblock %}
+
+{% block body %}
+
+    <div class="jumbotron">
+        <h1 class="display-4">Liste des membres</h1>
+    </div>
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Pseudo</th>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in usersList %}
+                <tr>
+                    <th scope="row">#{{ user.Id }}</a></th>
+                    <td>{{ user.Pseudo }}</td>
+                    <td>{{ user.Email }}</td>
+                    <td>
+                        <form name="updateRole" method="post" action="/Admin/Users/UpdateRole/{{ user.Email }}">
+                            <select name="role">
+                                {% set rolesList = ['Administrateur', 'Rédacteur', 'Visiteur'] %}
+                                {% for role in rolesList %}
+                                    <option value="{{ role }}" {% if role == user.Role %}selected{% endif %}>{{ role }}</option>
+                                {% endfor %}
+                            <input type="submit">
+                            </select>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}

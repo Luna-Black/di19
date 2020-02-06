@@ -6,14 +6,36 @@ use src\Model\User;
 
 class UserController extends  AbstractController {
 
+    public function listAll() {
+        $user = new User();
+        $usersList = $user->SqlGetAll(Bdd::GetInstance());
+
+        //Lancer la vue TWIG
+        return $this->twig->render(
+            'User/users.html.twig',[
+                'usersList' => $usersList
+            ]
+        );
+    }
+
+    public function updateRole($email) {
+        $SQLUser = new User();
+        $user = $SQLUser->SqlGet(Bdd::GetInstance(), $email);
+
+        if($_POST) {
+            $user->setRole($_POST['role']);
+            $user->SqlUpdateRole(Bdd::GetInstance());
+        }
+        header('Location:/Admin/Users');
+    }
+
     public function loginForm(){
         return $this->twig->render('User/login.html.twig');
     }
 
     public function loginCheck(){
         $SQLUser = new User();
-        $SQLUser->setEmail($_POST['email']);
-        $user = $SQLUser->SqlGet(Bdd::GetInstance());
+        $user = $SQLUser->SqlGet(Bdd::GetInstance(), $_POST['email']);
         var_dump($_POST);
         var_dump($user);
         if($_POST['password'] == $user->getMdp() and $_POST['email'] != ''){
@@ -88,7 +110,7 @@ class UserController extends  AbstractController {
         if($_POST){
             $user = new User();
             $user->setPseudo($_POST['pseudo']);
-            $user->setPassword($_POST['password']);
+            $user->setMdp($_POST['password']);
             $user->setEmail($_POST['email']);
             $user->setRole($_POST['role']);
             $user->setValide($_POST['valide']);
@@ -105,10 +127,6 @@ class UserController extends  AbstractController {
 
     public function showSignUp() {
         return $this->twig->render('User/signup.html.twig');
-    }
-
-    public function listAll() {
-
     }
 
     public function update() {
