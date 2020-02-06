@@ -18,6 +18,7 @@ spl_autoload_register('chargerClasse');
 $router = new \src\Router\Router($_GET['url']);
 $router->get('/', "Article#ListAll");
 $router->get('/Article', "Article#ListAll");
+$router->get('Article/Show/:id', 'Article#show');
 $router->get('/Article/Update/:id', "Article#Update#id");
 $router->post('/Article/Update/:id', "Article#Update#id");
 $router->get('/Article/Add', "Article#Add");
@@ -45,7 +46,6 @@ $router->post('/Admin/Categories/Add',"Category#add");
 $router->get('/Admin/Categories',"Category#listAll");
 $router->get('/SignUp', 'User#showSignUp');
 $router->post('/SignUp', 'User#signup');
-
 
 echo $router->run();
 
