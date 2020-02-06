@@ -11,8 +11,28 @@ class UserController extends  AbstractController {
     }
 
     public function loginCheck(){
+        $SQLUser = new User();
+        $SQLUser->setEmail($_POST['email']);
+        $user = $SQLUser->SqlGet(Bdd::GetInstance());
+        var_dump($_POST);
+        var_dump($user);
+        if($_POST['password'] == $user->getMdp() and $_POST['email'] != ''){
+            var_dump('test');
+            unset($_SESSION['errorlogin']);
+            $_SESSION['login'] = array(
+                'Pseudo' => $user->getPseudo(),
+                'Email' => $user->getEmail(),
+                'Role' => $user->getRole()
+            );
+            header('Location:/');
+        }else{
+            $_SESSION['errorlogin'] = 'Erreur Authent.';
+            header('Location:/Login');
+        }
+    }
 
-        if(!filter_var(
+
+        /*if(!filter_var(
             $_POST['password'],
             FILTER_VALIDATE_REGEXP,
             array(
@@ -43,11 +63,7 @@ class UserController extends  AbstractController {
         }else{
             $_SESSION['errorlogin'] = "Erreur Authent.";
             header('Location:/Login');
-        }
-
-
-
-    }
+        }*/
 
     public static function roleNeed($roleATester){
         if(isset($_SESSION['login'])){
