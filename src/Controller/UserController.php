@@ -52,7 +52,7 @@ class UserController extends  AbstractController {
     public static function checkRoles(array $testedRoles){
         if(isset($_SESSION['login'])){
             if(!in_array($_SESSION['login']['role'], $testedRoles)){
-                $_SESSION['errorlogin'] = "Manque le role : ".$testedRoles;
+                $_SESSION['errorlogin'] = "Vous n'avez pas les droits";
                 header('Location:/Login');
             }
         }else{

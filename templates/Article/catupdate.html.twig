@@ -1,0 +1,16 @@
+{% extends "index.html.twig" %}
+{% block title %}{{ parent() }} - Mise à jour d'une catégorie {% endblock %}
+
+
+{% block body %}
+    <div class="jumbotron">
+        <h1 class="display-4">Modification d'une catégorie</h1>
+    </div>
+    <div class="container-flui mt-2">
+        <form method="post" class="col-lg-8" action='/Admin/Categories/Update/{{ category.Id }}'>
+            <label for="categorie" >Update de </label>
+            <input type="category" name="Nom" value="{{ category.Nom }}">
+            <input type="submit">
+        </form>
+    </div>
+{% endblock %}

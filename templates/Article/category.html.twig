@@ -4,11 +4,11 @@
 {% block body %}
 
     <div class="jumbotron">
-        <h1 class="display-4">Liste des catégorie</h1>
+        <h1 class="display-4">Liste des catégories</h1>
     </div>
     <div class="container-flui mt-2">
     <form method="post" class="col-lg-8" action='/Admin/Categories/Add'>
-            <label for="categorie" class="form-control">Ajout d'une Catégorie</label>
+            <label for="categorie" >Ajout d'une Catégorie</label>
             <input type="category" name="Nom">
             <input type="submit">
     </form>
@@ -23,7 +23,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for category in categoryList %}
+            {% for category in categories %}
                 <tr>
                     <td>{{ category.id }}</td>
                     <td>{{ category.Nom }}</td>
@@ -32,7 +32,6 @@
                             <a class="btn btn-warning" href="/Admin/Categories/Update/{{ category.id }}"><i class="fas fa-edit"></i></a>
                             <a class="btn btn-danger" href="/Admin/Categories/Delete/{{ category.id }}"><i class="far fa-trash-alt"></i></a>
                         </div>
-
                     </td>
                 </tr>
             {% endfor %}
