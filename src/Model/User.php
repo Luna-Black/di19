@@ -7,20 +7,38 @@ class User {
     private $Mdp;
     private $Pseudo;
     private $Role;
-    private $Valide;
+    private $Permissions;
 
 
 
     public function SqlAdd(\PDO $bdd) {
+        $permissionsDict = array(
+            "articles" => array(
+                "add" => false,
+                "update" => false,
+                "delete" => false,
+                "validate" => false
+            ),
+            "categories" => array(
+                "add" => false,
+                "update" => false,
+                "delete" => false
+            ),
+            "users" => array(
+                "permissions" => false
+            )
+        );
         try{
-            $requete = $bdd->prepare('INSERT INTO utilisateurs (Pseudo,Email,Mdp,Id_roles) VALUES (:Pseudo,:Email,:Mdp,:Valide,:Role)');
+            $requete = $bdd->prepare(
+                'INSERT INTO utilisateurs (Pseudo,Email,Mdp,Id_roles, Permissions) 
+                VALUES (:Pseudo,:Email,:Mdp,:Role, :Permissions)'
+            );
             $requete->execute([
                 "Email"=>$this->getEmail(),
                 "Mdp"=>$this->getMdp(),
                 "Pseudo"=>$this->getPseudo(),
-                "Valide"=>"0",
                 "Role"=>"2",
-
+                "Permissions" => json_encode($permissionsDict)
             ]);
             return array("result"=>true,"message"=>$bdd->lastInsertId());
         }catch (\Exception $e){
@@ -34,7 +52,7 @@ class User {
 
     public function SqlGetAll(\PDO $bdd) {
         $requete = $bdd->prepare(
-            'SELECT utilisateurs.Id as userID, Pseudo, Mdp, Email, roles.Nom as role 
+            'SELECT utilisateurs.Id as userID, Pseudo, Mdp, Email, Permissions, roles.Nom as role 
             FROM utilisateurs
             INNER JOIN roles on utilisateurs.Id_roles = roles.Id
             ORDER BY userID ASC'
@@ -49,20 +67,21 @@ class User {
             $user->setPseudo($SQLUser['Pseudo']);
             $user->setEmail($SQLUser['Email']);
             $user->setRole($SQLUser['role']);
+            $user->setPermissions($SQLUser['Permissions']);
 
             $usersList[] = $user;
         }
         return $usersList;
     }
 
-    public function SqlGet(\PDO $bdd, $email) {
+    public function SqlGet(\PDO $bdd, $username) {
         $requete = $bdd->prepare(
-            'SELECT utilisateurs.Id as UserID, Pseudo, Mdp, Email, roles.Nom as role FROM utilisateurs
+            'SELECT utilisateurs.Id as UserID, Pseudo, Mdp, Email, Permissions, roles.Nom as role FROM utilisateurs
             INNER JOIN roles on utilisateurs.Id_roles = roles.Id
-            WHERE Email=:email'
+            WHERE Pseudo=:username'
         );
         $requete->execute([
-            "email" => $email
+            "username" => $username
         ]);
 
         $data = $requete->fetch();
@@ -73,10 +92,24 @@ class User {
         $user->setMdp($data['Mdp']);
         $user->setEmail($data['Email']);
         $user->setRole($data['role']);
+        $user->setPermissions($data['Permissions']);
 
         return $user;
     }
-
+    public function SqlUpdatePermissions(\PDO $bdd) {
+        try{
+            $requete = $bdd->prepare(
+                'UPDATE utilisateurs SET Permissions=:permissions WHERE Pseudo=:username'
+            );
+            $requete->execute([
+                'permissions' => $this->getPermissions(),
+                'username' => $this->getPseudo()
+            ]);
+            return array("0", "[OK] Update");
+        }catch (\Exception $e){
+            return array("1", "[ERREUR] ".$e->getMessage());
+        }
+    }
 
     public function SqlUpdateRole(\PDO $bdd) {
         $requete = $bdd->prepare(
@@ -185,17 +218,17 @@ class User {
     /**
      * @return mixed
      */
-    public function getValide()
+    public function getPermissions()
     {
-        return $this->Valide;
+        return $this->Permissions;
     }
 
     /**
-     * @param mixed $Valide
+     * @param mixed $Permissions
      */
-    public function setValide($Valide)
+    public function setPermissions($Permissions)
     {
-        $this->Valide = $Valide;
+        $this->Permissions = $Permissions;
     }
 
 

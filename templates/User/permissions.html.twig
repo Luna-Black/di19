@@ -1,0 +1,39 @@
+{% extends "index.html.twig" %}
+{% block title %}{{ parent() }} - Gestion des droits {% endblock %}
+
+{% block body %}
+    <div class="container-fluid mt-2">
+
+        <h2 class="display-3">Gestion des droits de {{ user.Pseudo }}</h2>
+        <hr class="my-4">
+
+        <form method="post" action="/Admin/Users/Permissions/{{ user.Pseudo }}">
+            <div>
+                <p>Articles :</p>
+                <input type="checkbox" name="articles[]" value="add" {% if permissions['articles']['add'] == True %}checked{% endif %}>
+                <label for="add">Ajouter</label>
+                <input type="checkbox" name="articles[]" value="update" {% if permissions['articles']['update'] == True %}checked{% endif %}>
+                <label for="update">Modifier</label>
+                <input type="checkbox" name="articles[]" value="delete" {% if permissions['articles']['delete'] == True %}checked{% endif %}>
+                <label for="delete">Supprimer</label>
+                <input type="checkbox" name="articles[]" value="validate" {% if permissions['articles']['validate'] == True %}checked{% endif %}>
+                <label for="validateArticle">Valider</label>
+            </div>
+            <div>
+                <p>Catégories :</p>
+                <input type="checkbox" name="categories[]" value="add" {% if permissions['categories']['add'] == True %}checked{% endif %}>
+                <label for="add">Ajouter</label>
+                <input type="checkbox" name="categories[]" value="update" {% if permissions['categories']['update'] == True %}checked{% endif %}>
+                <label for="update">Modifier</label>
+                <input type="checkbox" name="categories[]" value="delete" {% if permissions['categories']['delete'] == True %}checked{% endif %}>
+                <label for="delete">Supprimer</label>
+            </div>
+            <div>
+                <p>Membres :</p>
+                <input type="checkbox" name="users[]" value="updatePermissions" {% if permissions['users']['updatePermissions'] == True %}checked{% endif %}>
+                <label for="updatePermissions">Modifier les droits</label>
+            </div>
+            <input type="submit">
+        </form>
+    </div>
+{% endblock %}

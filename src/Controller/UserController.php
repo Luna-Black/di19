@@ -7,6 +7,7 @@ use src\Model\User;
 class UserController extends  AbstractController {
 
     public function listAll() {
+        UserController::checkPermission('users', 'updatePermissions');
         $user = new User();
         $usersList = $user->SqlGetAll(Bdd::GetInstance());
 
@@ -19,6 +20,7 @@ class UserController extends  AbstractController {
     }
 
     public function updateRole($email) {
+        UserController::checkPermission('users', 'updatePermissions');
         $SQLUser = new User();
         $user = $SQLUser->SqlGet(Bdd::GetInstance(), $email);
 
@@ -35,16 +37,16 @@ class UserController extends  AbstractController {
 
     public function loginCheck(){
         $SQLUser = new User();
-        $user = $SQLUser->SqlGet(Bdd::GetInstance(), $_POST['email']);
+        $user = $SQLUser->SqlGet(Bdd::GetInstance(), $_POST['username']);
         var_dump($_POST);
         var_dump($user);
-        if($_POST['password'] == $user->getMdp() and $_POST['email'] != ''){
-            var_dump('test');
+        if($_POST['password'] == $user->getMdp() and $_POST['username'] != ''){
             unset($_SESSION['errorlogin']);
             $_SESSION['login'] = array(
                 'Pseudo' => $user->getPseudo(),
                 'Email' => $user->getEmail(),
-                'Role' => $user->getRole()
+                'Role' => $user->getRole(),
+                'Permissions' => $user->getPermissions()
             );
             header('Location:/');
         }else{
@@ -87,9 +89,46 @@ class UserController extends  AbstractController {
             header('Location:/Login');
         }*/
 
-    public static function checkRoles(array $testedRoles){
+
+    public function updatePermissions($username) {
+        UserController::checkPermission('users', 'updatePermissions');
+        $SQLUser = new User();
+        $user = $SQLUser->SqlGet(Bdd::GetInstance(), $username);
+
+        if($_POST){
+            $permissionsDict = array(
+                "articles" => array(
+                    "add" => in_array('add', $_POST['articles']),
+                    "update" => in_array('update', $_POST['articles']),
+                    "delete" => in_array('delete', $_POST['articles']),
+                    "validate" => in_array('validate', $_POST['articles'])
+                ),
+                "categories" => array(
+                    "add" => in_array('add', $_POST['categories']),
+                    "update" => in_array('update', $_POST['categories']),
+                    "delete" => in_array('delete', $_POST['categories'])
+                ),
+                "users" => array(
+                    "updatePermissions" => in_array('add', $_POST['categories'])
+                )
+            );
+            $permissionsJson = json_encode($permissionsDict);
+            $user->setPermissions($permissionsJson);
+            $user->SqlUpdatePermissions(Bdd::GetInstance());
+            header('Location:/Admin/Users');
+        }
+        $permissions = json_decode($user->getPermissions());
+        var_dump($permissions);
+        return $this->twig->render('User/permissions.html.twig', [
+            'user' => $user,
+            'permissions' => $permissions
+        ]);
+    }
+
+    public static function checkPermission($PermissionCat, $testedPermission){
         if(isset($_SESSION['login'])){
-            if(!in_array($_SESSION['login']['role'], $testedRoles)){
+            $permissions = json_decode($_SESSION['login']['Permissions'], true);
+            if(!$permissions[$PermissionCat][$testedPermission]){
                 $_SESSION['errorlogin'] = "Vous n'avez pas les droits";
                 header('Location:/Login');
             }
@@ -121,9 +160,4 @@ class UserController extends  AbstractController {
     public function showSignUp() {
         return $this->twig->render('User/signup.html.twig');
     }
-
-    public function update() {
-
-    }
-
 }
