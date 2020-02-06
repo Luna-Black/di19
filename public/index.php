@@ -39,7 +39,7 @@ $router->get('/Login', 'User#loginForm');
 $router->post('/Login', 'User#loginCheck');
 $router->get('/Logout', 'User#logout');
 $router->get('/Article/Search/:keyword', 'Article#search#keyword');
-$router->get('/Admin/:id', 'Article#listByStatus#id');
+$router->get('/Admin/Articles/:id', 'Article#listByStatus#id');
 $router->get('Admin/Article/Status/:id/:idstatus','Article#updateStatus#id#idstatus');
 $router->get('/Admin/Categories/Delete/:id',"Category#delete#id");
 $router->get('/Admin/Categories/Update/:id','Category#update#id');
