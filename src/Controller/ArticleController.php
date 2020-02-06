@@ -14,7 +14,7 @@ class ArticleController extends AbstractController {
 
     public function ListAll(){
         $article = new Article();
-        $listArticle = $article->SqlGetAll(Bdd::GetInstance());
+        $listArticle = $article->SqlGetByStatus(Bdd::GetInstance(), 1);
 
         //Lancer la vue TWIG
         return $this->twig->render(
