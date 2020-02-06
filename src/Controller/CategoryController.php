@@ -6,7 +6,7 @@ use src\Model\Bdd;
 class CategoryController extends AbstractController {
 
     public function add() {
-        UserController::roleNeed('Administrateur');
+        UserController::checkRoles(['Administrateur']);
         if($_POST){
             $category = new Category();
             $category->setNom($_POST['Nom']);
@@ -18,7 +18,7 @@ class CategoryController extends AbstractController {
     }
 
     public function delete($categoryID) {
-        UserController::roleNeed('Administrateur');
+        UserController::checkRoles(['Administrateur']);
         $categorySQL = new Category();
         $category = $categorySQL->SqlGet(Bdd::GetInstance(),$categoryID);
         $category->SqlDelete(Bdd::GetInstance(),$categoryID);
@@ -28,7 +28,7 @@ class CategoryController extends AbstractController {
 
 
     public function update($categoryID) {
-        UserController::roleNeed('Administrateur');
+        UserController::checkRoles(['Administrateur']);
         $categorySQL = new Category();
         $category = $categorySQL->SqlGet(Bdd::GetInstance(),$categoryID);
         if($_POST){
@@ -41,12 +41,12 @@ class CategoryController extends AbstractController {
     }
 
     public function listAll() {
-        UserController::roleNeed('Administrateur');
+        UserController::checkRoles(['Administrateur']);
         $category = new Category();
         $listCategory = $category->SqlGetAll(Bdd::GetInstance());
 
         return $this->twig->render('Article/category.html.twig',[
-                   'categorie'=>$listCategory
+                   'categories'=>$listCategory
         ]);
 
     }

@@ -65,11 +65,11 @@ class UserController extends  AbstractController {
             header('Location:/Login');
         }*/
 
-    public static function roleNeed($roleATester){
+    public static function checkRoles(array $testedRoles){
         if(isset($_SESSION['login'])){
-            if(!in_array($roleATester,$_SESSION['login']['roles'])){
-                $_SESSION['errorlogin'] = "Manque le role : ".$roleATester;
-                header('Location:/Contact');
+            if(!in_array($_SESSION['login']['role'], $testedRoles)){
+                $_SESSION['errorlogin'] = "Manque le role : ".$testedRoles;
+                header('Location:/Login');
             }
         }else{
             $_SESSION['errorlogin'] = "Veuillez vous identifier";
