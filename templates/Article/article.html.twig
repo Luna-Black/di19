@@ -1,0 +1,19 @@
+{% extends "index.html.twig" %}
+{% block title %}{{ parent() }} - {{ article.Titre }}{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid mt-2">
+
+        <h2 class="display-3">{{ article.Titre }}</h2>
+        <hr class="my-4">
+        <p> {{ '#' ~ article.Id ~ ' - ' ~ article.Auteur ~ ' - ' ~ article.DateAjout | date("d/m/Y") }}</p>
+        {% if article.ImageFileName != '' and    file_exist('./uploads/images/'~article.ImageRepository~'/'~article.ImageFileName) %}
+            <img class='card-img-top' alt='Article' src='/uploads/images/{{ article.ImageRepository }}/{{article.ImageFileName}}'/>
+        {% else %}
+            <h6 class="display-4">Pas d'image</h6>
+        {% endif %}
+        <p>{{ article.Description }}</p>
+    </div>
+
+{% endblock %}
