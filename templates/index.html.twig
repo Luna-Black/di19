@@ -93,15 +93,10 @@
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <script>
-    var recaptchaCallback = function () {
-        console.log('recaptcha is ready'); // showing
-        grecaptcha.render("recaptcha", {
-            sitekey: '6Ld3VdYUAAAAABm2FdYgzP5ho0Apb0l2_iKw0VgR',
-            callback: function () {
-                console.log('recaptcha callback');
-            }
-        });
-    }
+    document.getElementById("send_validation").hidden = true;
+    var correctCaptcha = function(response) {
+        document.getElementById("send_validation").hidden = false;
+    };
 </script>
 
 {% block javascript %}{% endblock %}
