@@ -38,8 +38,6 @@ class UserController extends  AbstractController {
     public function loginCheck(){
         $SQLUser = new User();
         $user = $SQLUser->SqlGet(Bdd::GetInstance(), $_POST['username']);
-        var_dump($_POST);
-        var_dump($user);
         if($_POST['password'] == $user->getMdp() and $_POST['username'] != ''){
             unset($_SESSION['errorlogin']);
             $_SESSION['login'] = array(
@@ -118,7 +116,6 @@ class UserController extends  AbstractController {
             header('Location:/Admin/Users');
         }
         $permissions = json_decode($user->getPermissions());
-        var_dump($permissions);
         return $this->twig->render('User/permissions.html.twig', [
             'user' => $user,
             'permissions' => $permissions
