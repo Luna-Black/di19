@@ -40,7 +40,8 @@ class ArticleController extends AbstractController {
 
         return $this->twig->render(
             'Article/search.html.twig',[
-                'articleList' => $articleList
+                'articleList' => $articleList,
+                'keyword' => $keyword
             ]
         );
     }

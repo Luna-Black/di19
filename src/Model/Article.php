@@ -102,7 +102,8 @@ class Article extends Contenu implements \JsonSerializable {
             FROM articles
             INNER JOIN statuts on articles.Id_statuts = statuts.Id
             INNER JOIN categories on articles.Id_categories = categories.Id
-            WHERE '.$conditions
+            WHERE '.$conditions.'
+            ORDER BY articleID ASC'
         );
         $requete->execute();
         $articlesArray = $requete->fetchAll();
