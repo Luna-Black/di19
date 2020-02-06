@@ -24,16 +24,30 @@ class User {
         }
     }
 
-
-
-
-
     public function SqlUpdate() {
 
     }
 
-    public function SqlGetAll() {
+    public function SqlGetAll(\PDO $bdd) {
+        $requete = $bdd->prepare(
+            'SELECT utilisateurs.Id as userID, Pseudo, Mdp, Email, roles.Nom as role 
+            FROM utilisateurs
+            INNER JOIN roles on utilisateurs.Id_roles = roles.Id
+            ORDER BY userID ASC'
+        );
+        $requete->execute();
+        $usersArray = $requete->fetchAll();
 
+        $usersList = [];
+        foreach ($usersArray as $SQLUser){
+            $user = new User();
+            $user->getId($SQLUser['userID']);
+            $user->getPseudo($SQLUser['Pseudo']);
+            $user->getEmail($SQLUser['Email']);
+            $user->getRole($SQLUser['role']);
+
+            $usersList[] = $user;
+        }
     }
 
     public function SqlGet(\PDO $bdd) {
