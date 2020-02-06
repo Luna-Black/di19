@@ -40,7 +40,8 @@ class Article extends Contenu implements \JsonSerializable {
                 'SELECT articles.Id as articleID, Titre, Auteur, Description, DateAjout, ImageRepository, ImageFileName, statuts.Nom as statut, categories.Nom as categorie
                 FROM articles
                 INNER JOIN statuts on articles.Id_statuts = statuts.Id
-                INNER JOIN categories on articles.Id_categories = categories.Id'
+                INNER JOIN categories on articles.Id_categories = categories.Id
+                ORDER BY articleID ASC'
             );
             $requete->execute();
             $arrayArticle = $requete->fetchAll();
@@ -101,7 +102,8 @@ class Article extends Contenu implements \JsonSerializable {
             FROM articles
             INNER JOIN statuts on articles.Id_statuts = statuts.Id
             INNER JOIN categories on articles.Id_categories = categories.Id
-            WHERE '.$conditions
+            WHERE '.$conditions.'
+            ORDER BY articleID ASC'
         );
         $requete->execute();
         $articlesArray = $requete->fetchAll();
