@@ -9,19 +9,16 @@ class CategoryController extends AbstractController {
         UserController::checkPermission('categories', 'add');
         $category= new Category();
         $listCategory = $category->SqlGetAll(Bdd::GetInstance());
-        if($_POST AND $_SESSION['token'] == $_POST['token']){
+        if($_POST){
             $category = new Category();
             $category->setNom($_POST['Nom']);
 
             $category->SqlAdd(Bdd::GetInstance());
             header('Location:/Admin/Categories');
         }else {
-            // Génération d'un TOKEN
-            $token = bin2hex(random_bytes(32));
-            $_SESSION['token'] = $token;
+
             return $this->twig->render('Article/category.html.twig',
                 [
-                    'token' => $token,
                     'categories'=> $listCategory
                 ]);
 
