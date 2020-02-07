@@ -14,7 +14,7 @@ class ArticleController extends AbstractController {
 
     public function ListAll(){
         $article = new Article();
-        $listArticle = $article->SqlGetAll(Bdd::GetInstance());
+        $listArticle = $article->SqlGetByStatus(Bdd::GetInstance(), 1);
 
         //Lancer la vue TWIG
         return $this->twig->render(
@@ -25,6 +25,8 @@ class ArticleController extends AbstractController {
     }
 
     public function listByStatus($status){
+        UserController::checkPermission('articles', 'validate');
+        if($_SESSION['login'])
         $article = new Article();
         $listArticle = $article->SqlGetByStatus(Bdd::GetInstance(), $status);
 
@@ -39,6 +41,9 @@ class ArticleController extends AbstractController {
     public function show($articleID){
         $SQLArticle = new Article();
         $article = $SQLArticle->SqlGet(Bdd::GetInstance(), $articleID);
+        if(!$article->getStatut() == 'Validé') {
+            UserController::checkPermission('articles', 'validate');
+        }
         return $this->twig->render(
             'Article/article.html.twig',[
                 'article' => $article
@@ -59,7 +64,7 @@ class ArticleController extends AbstractController {
     }
 
     public function add(){
-        UserController::checkRoles(['Rédacteur','Administrateur']);
+        UserController::checkPermission('articles', 'add');
         if($_POST AND $_SESSION['token'] == $_POST['token']){
             $sqlRepository = null;
             $nomImage = null;
@@ -104,6 +109,7 @@ class ArticleController extends AbstractController {
     }
 
     public function update($articleID){
+        UserController::checkPermission('articles', 'update');
         $articleSQL = new Article();
         $article = $articleSQL->SqlGet(BDD::getInstance(),$articleID);
         $category= new Category();
@@ -152,6 +158,7 @@ class ArticleController extends AbstractController {
     }
 
     public function updateStatus($articleID, $statusID) {
+        UserController::checkPermission('articles', 'validate');
         $articleSQL = new Article();
         $article = $articleSQL->SqlGet(BDD::getInstance(),$articleID);
 
@@ -162,6 +169,7 @@ class ArticleController extends AbstractController {
     }
 
     public function Delete($articleID){
+        UserController::checkPermission('articles', 'delete');
         $articleSQL = new Article();
         $article = $articleSQL->SqlGet(BDD::getInstance(),$articleID);
         $article->SqlDelete(BDD::getInstance(),$articleID);
@@ -173,6 +181,7 @@ class ArticleController extends AbstractController {
     }
 
     public function fixtures(){
+        UserController::checkPermission('articles', 'delete');
         $arrayAuteur = array('Fabien', 'Brice', 'Bruno', 'Jean-Pierre', 'Benoit', 'Emmanuel', 'Sylvie', 'Marion');
         $arrayTitre = array('PHP en force', 'React JS une valeur montante', 'C# toujours au top', 'Java en légère baisse'
         , 'Les entreprises qui recrutent', 'Les formations à ne pas rater', 'Les langages populaires en 2020', 'L\'année du Javascript');
@@ -235,15 +244,4 @@ class ArticleController extends AbstractController {
 
         header('location:/Article/');
     }
-
-    public function test($param1,$param2){
-        var_dump($param1);
-        var_dump($param2);
-    }
-
-    public function Validation($idArticle){
-        UserController::checkRoles(['Administrateur']);
-
-    }
-
 }

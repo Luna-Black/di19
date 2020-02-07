@@ -6,7 +6,7 @@ use src\Model\Bdd;
 class CategoryController extends AbstractController {
 
     public function add() {
-        //UserController::checkRoles(['Administrateur']);
+        UserController::checkPermission('categories', 'add');
         if($_POST){
             $category = new Category();
             $category->setNom($_POST['Nom']);
@@ -19,7 +19,7 @@ class CategoryController extends AbstractController {
     }
 
     public function delete($categoryID) {
-       // UserController::checkRoles(['Administrateur']);
+        UserController::checkPermission('categories', 'delete');
         $categorySQL = new Category();
         $category = $categorySQL->SqlGet(Bdd::GetInstance(),$categoryID);
         $category->SqlDelete(Bdd::GetInstance(),$categoryID);
@@ -29,13 +29,12 @@ class CategoryController extends AbstractController {
 
 
     public function update($categoryID) {
-       // UserController::checkRoles(['Administrateur']);
+        UserController::checkPermission('categories', 'update');
         $categorySQL = new Category();
         $category = $categorySQL->SqlGet(Bdd::GetInstance(),$categoryID);
         if($_POST){
             $category->setNom($_POST['Nom']);
             $category->SqlUpdate(Bdd::GetInstance());
-            var_dump($category);
 
             header('location:/Admin/Categories');
         }
@@ -46,7 +45,7 @@ class CategoryController extends AbstractController {
     }
 
     public function listAll() {
-       // UserController::checkRoles(['Administrateur']);
+        UserController::checkPermission('categories', 'add');
         $category = new Category();
         $listCategory = $category->SqlGetAll(Bdd::GetInstance());
 

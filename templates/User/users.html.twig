@@ -13,7 +13,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Pseudo</th>
                 <th scope="col">Email</th>
-                <th scope="col">Role</th>
+                <th scope="col">Droits</th>
             </tr>
             </thead>
             <tbody>
@@ -23,15 +23,7 @@
                     <td>{{ user.Pseudo }}</td>
                     <td>{{ user.Email }}</td>
                     <td>
-                        <form name="updateRole" method="post" action="/Admin/Users/UpdateRole/{{ user.Email }}">
-                            <select name="role">
-                                {% set rolesList = ['Administrateur', 'Rédacteur', 'Visiteur'] %}
-                                {% for role in rolesList %}
-                                    <option value="{{ role }}" {% if role == user.Role %}selected{% endif %}>{{ role }}</option>
-                                {% endfor %}
-                            <input type="submit">
-                            </select>
-                        </form>
+                        <a class="btn btn-primary" href="/Admin/Users/Permissions/{{ user.Pseudo }}"><i class="far fa-eye"></i></a>
                     </td>
                 </tr>
             {% endfor %}
