@@ -1,6 +1,9 @@
 <?php
 namespace src\Controller;
 
+use src\Model\Article;
+use src\Model\Bdd;
+
 class ContactController extends AbstractController{
     private $mailer;
     private $transport;
@@ -8,9 +11,9 @@ class ContactController extends AbstractController{
     public function __construct()
     {
         parent::__construct();
-        $this->transport = (new \Swift_SmtpTransport('smtp.mailtrap.io', 25))
-            ->setUsername('3dd84281bc8679')
-            ->setPassword('8a9180301c670a');
+        $this->transport = (new \Swift_SmtpTransport('smtp.mailtrap.io', 465))
+            ->setUsername('82f90a87eb5933')
+            ->setPassword('cfd1ab8dcbd215');
         $this->mailer = new \Swift_Mailer($this->transport);
 
     }
@@ -34,6 +37,25 @@ class ContactController extends AbstractController{
         $result = $this->mailer->send($mail);
 
         return $result;
+    }
+
+    public function sendMailByArticle($id) {
+        $SQLArticle = new Article();
+        $article = $SQLArticle->SqlGet(Bdd::GetInstance(), $id);
+        $mail = (new \Swift_Message($article->getTitre()))
+            ->setFrom([$_POST["email"] => $_POST["name"]])
+            ->setTo('contact@monsite.fr')
+            ->setBody(
+                $this->twig->render('Contact/mailarticle.html.twig',
+                    [
+                        'message' => $_POST["content"],
+                        'article' => $article
+                    ])
+                ,'text/html'
+            );
+
+        $this->mailer->send($mail);
+        header('Location:/Article/Show/'.$id);
     }
 
 }

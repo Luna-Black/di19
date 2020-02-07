@@ -107,13 +107,13 @@ class UserController extends  AbstractController {
                     "delete" => in_array('delete', $_POST['categories'])
                 ),
                 "users" => array(
-                    "updatePermissions" => in_array('add', $_POST['categories'])
+                    "updatePermissions" => in_array('updatePermissions', $_POST['users'])
                 )
             );
             $permissionsJson = json_encode($permissionsDict);
             $user->setPermissions($permissionsJson);
             $user->SqlUpdatePermissions(Bdd::GetInstance());
-            header('Location:/Admin/Users');
+            //header('Location:/Admin/Users');
         }
         $permissions = json_decode($user->getPermissions());
         return $this->twig->render('User/permissions.html.twig', [
