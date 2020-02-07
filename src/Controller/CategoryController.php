@@ -7,16 +7,25 @@ class CategoryController extends AbstractController {
 
     public function add() {
         UserController::checkPermission('categories', 'add');
+        $category= new Category();
+        $listCategory = $category->SqlGetAll(Bdd::GetInstance());
         if($_POST){
             $category = new Category();
             $category->setNom($_POST['Nom']);
 
             $category->SqlAdd(Bdd::GetInstance());
+            header('Location:/Admin/Categories');
+        }else {
+
+            return $this->twig->render('Article/category.html.twig',
+                [
+                    'categories'=> $listCategory
+                ]);
 
         }
-        header('Location:/Admin/Categories');
 
     }
+
 
     public function delete($categoryID) {
         UserController::checkPermission('categories', 'delete');
@@ -32,15 +41,20 @@ class CategoryController extends AbstractController {
         UserController::checkPermission('categories', 'update');
         $categorySQL = new Category();
         $category = $categorySQL->SqlGet(Bdd::GetInstance(),$categoryID);
-        if($_POST){
+        if($_POST AND $_SESSION['token'] == $_POST['token']){
             $category->setNom($_POST['Nom']);
             $category->SqlUpdate(Bdd::GetInstance());
 
             header('location:/Admin/Categories');
+        }else {
+            // Génération d'un TOKEN
+            $token = bin2hex(random_bytes(32));
+            $_SESSION['token'] = $token;
+            return $this->twig->render('Article/catupdate.html.twig', [
+                'category' => $category,
+                'token' => $token
+            ]);
         }
-        return $this->twig->render('Article/catupdate.html.twig',[
-            'category'=>$category
-        ]);
 
     }
 

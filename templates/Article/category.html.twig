@@ -10,6 +10,7 @@
     <form method="post" class="col-lg-8" action='/Admin/Categories/Add'>
             <label for="categorie" >Ajout d'une Catégorie</label>
             <input type="category" name="Nom">
+            <input type="hidden" name="token" value="{{ token }}">
             <input type="submit">
     </form>
     </div>
