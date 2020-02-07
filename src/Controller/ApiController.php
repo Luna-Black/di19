@@ -9,8 +9,9 @@ class ApiController {
     public function ArticleGet()
     {
         $article = new Article();
-        $listArticle = $article->SqlGetAll(Bdd::GetInstance());
-        return json_encode($listArticle);
+        $listArticle = $article->SqlGet5LastValidated(Bdd::GetInstance());
+        $articlesJson = json_encode($listArticle);
+        return $articlesJson;
     }
 
     public function ArticlePost()
