@@ -30,7 +30,6 @@ class ApiController {
     public function generateToken($username) {
         $SQLUser = new User();
         $user = $SQLUser->SqlGet(Bdd::GetInstance(), $username);
-        var_dump($user);
         $token = bin2hex(random_bytes(32));
         $user->setTokenApi($token);
         $user->SqlUpdateToken(Bdd::GetInstance());
