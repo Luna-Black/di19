@@ -26,8 +26,6 @@ class User {
         }catch (\Exception $e){
             return array("result"=>false,"message"=>$e->getMessage());
         }
-
-
     }
 
 

@@ -47,6 +47,7 @@ $router->get('/Admin/Categories',"Category#listAll");
 $router->get('/SignUp', 'User#showSignUp');
 $router->post('/SignUp', 'User#signup');
 
+
 echo $router->run();
 
 

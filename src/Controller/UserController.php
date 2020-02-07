@@ -77,10 +77,11 @@ class UserController extends  AbstractController {
             $user->setEmail($_POST['email']);
             }
 
-      header('Location:/');
+        var_dump($user->SqlAdd(Bdd::GetInstance()));
 
+        return $this->twig->render('User/compte.html.twig');
 
-    }
+       }
 
 
     public function showSignUp() {
