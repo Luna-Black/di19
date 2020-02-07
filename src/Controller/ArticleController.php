@@ -65,6 +65,8 @@ class ArticleController extends AbstractController {
 
     public function add(){
         UserController::checkPermission('articles', 'add');
+        $category= new Category();
+        $listCategory = $category->SqlGetAll(Bdd::GetInstance());
         if($_POST AND $_SESSION['token'] == $_POST['token']){
             $sqlRepository = null;
             $nomImage = null;
@@ -103,7 +105,8 @@ class ArticleController extends AbstractController {
             $_SESSION['token'] = $token;
             return $this->twig->render('Article/add.html.twig',
                 [
-                    'token' => $token
+                    'token' => $token,
+                    'categories' => $listCategory
                 ]);
         }
     }
@@ -149,6 +152,7 @@ class ArticleController extends AbstractController {
             ;
 
             $article->SqlUpdate(BDD::getInstance());
+            header('Location:/');
         }
 
         return $this->twig->render('Article/update.html.twig',[
