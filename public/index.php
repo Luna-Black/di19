@@ -54,6 +54,7 @@ $router->post('/Admin/Users/UpdateRole/:id', 'User#updateRole#id');
 $router->get('/SignUp', 'User#showSignUp');
 $router->post('/SignUp', 'User#signup');
 $router->get('/CssModify', 'cssModify#openFile');
+$router->post('/writefile/:fichiercss','cssmodify#writeFile#fichiercss');
 
 
 echo $router->run();

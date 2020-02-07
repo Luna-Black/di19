@@ -3,10 +3,10 @@
 
 {% block body %}
     <div>
-      <form method="post" action="">
-        <textarea placeholder="{{ fichiercss }}" name="css"></textarea><br/>
+      <form method="post" action="writefile/">
+        <textarea name="css">{{ fichiercss }}</textarea><br/>
 
-        <input type="submit" value="sauvegarder">
+        <button type="submit" id="sauvegarder">Sauvegarder</button>
       </form>
     </div>
 {% endblock %}

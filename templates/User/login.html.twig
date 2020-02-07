@@ -3,9 +3,6 @@
 {% block body %}
 
     <div class="container-fluid mt-2">
-        {% if session.errorlogin is defined %}
-            <div class="alert alert-danger">{{ session.errorlogin }}</div>
-        {% endif %}
         <form method="post" action="/Login">
             <label for="username">Pseudo</label>
             <input type="text" name="username">
