@@ -93,11 +93,9 @@ class ArticleController extends AbstractController {
                 ->setDateAjout($_POST['DateAjout'])
                 ->setImageRepository($sqlRepository)
                 ->setImageFileName($nomImage)
-                ->setStatut($_POST['statut'])
-                ->setCategorie($_POST['categorie'])
+                ->setCategorie($_POST['categorie']);
 
-            ;
-            $article->SqlAdd(BDD::getInstance());
+            $article->SqlAdd(Bdd::getInstance());
             header('Location:/Article');
         }else{
             // Génération d'un TOKEN

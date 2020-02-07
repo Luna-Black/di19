@@ -26,7 +26,7 @@ class Article extends Contenu implements \JsonSerializable {
                 "Auteur" => $this->getAuteur(),
                 "ImageRepository" => $this->getImageRepository(),
                 "ImageFileName" => $this->getImageFileName(),
-                "Id_statuts" => $this->getStatut(),
+                "Id_statuts" => 2,
                 "Id_categories" => $this->getCategorie()
             ]);
             return array("result"=>true,"message"=>$bdd->lastInsertId());
