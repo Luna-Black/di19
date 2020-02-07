@@ -10,6 +10,7 @@
         <form method="post" class="col-lg-8" action='/Admin/Categories/Update/{{ category.Id }}'>
             <label for="categorie" >Update de </label>
             <input type="category" name="Nom" value="{{ category.Nom }}">
+            <input type="hidden" name="token" value="{{ token }}">
             <input type="submit">
         </form>
     </div>

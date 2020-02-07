@@ -93,7 +93,7 @@ class UserController extends  AbstractController {
         $SQLUser = new User();
         $user = $SQLUser->SqlGet(Bdd::GetInstance(), $username);
 
-        if($_POST){
+        if($_POST AND $_SESSION['token'] == $_POST['token']){
             $permissionsDict = array(
                 "articles" => array(
                     "add" => in_array('add', $_POST['articles']),
@@ -113,13 +113,18 @@ class UserController extends  AbstractController {
             $permissionsJson = json_encode($permissionsDict);
             $user->setPermissions($permissionsJson);
             $user->SqlUpdatePermissions(Bdd::GetInstance());
-            //header('Location:/Admin/Users');
+            header('Location:/Admin/Users');
+        }else {
+            // Génération d'un TOKEN
+            $token = bin2hex(random_bytes(32));
+            $_SESSION['token'] = $token;
+            $permissions = json_decode($user->getPermissions());
+            return $this->twig->render('User/permissions.html.twig', [
+                'token' => $token,
+                'user' => $user,
+                'permissions' => $permissions
+            ]);
         }
-        $permissions = json_decode($user->getPermissions());
-        return $this->twig->render('User/permissions.html.twig', [
-            'user' => $user,
-            'permissions' => $permissions
-        ]);
     }
 
     public static function checkPermission($PermissionCat, $testedPermission){

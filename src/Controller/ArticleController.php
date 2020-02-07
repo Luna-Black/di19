@@ -117,7 +117,7 @@ class ArticleController extends AbstractController {
         $article = $articleSQL->SqlGet(BDD::getInstance(),$articleID);
         $category= new Category();
         $listCategory = $category->SqlGetAll(Bdd::GetInstance());
-        if($_POST){
+        if($_POST AND $_SESSION['token'] == $_POST['token']){
             $sqlRepository = null;
             $nomImage = null;
             if(!empty($_FILES['image']['name']) )
@@ -153,12 +153,16 @@ class ArticleController extends AbstractController {
 
             $article->SqlUpdate(BDD::getInstance());
             header('Location:/');
+        }else {
+            // Génération d'un TOKEN
+            $token = bin2hex(random_bytes(32));
+            $_SESSION['token'] = $token;
+            return $this->twig->render('Article/update.html.twig', [
+                'article' => $article,
+                'categories' => $listCategory,
+                'token' => $token
+            ]);
         }
-
-        return $this->twig->render('Article/update.html.twig',[
-            'article' => $article,
-            'categories' => $listCategory
-        ]);
     }
 
     public function updateStatus($articleID, $statusID) {
