@@ -95,7 +95,6 @@ class ArticleController extends AbstractController {
                 ->setImageFileName($nomImage)
                 ->setStatut($_POST['statut'])
                 ->setCategorie($_POST['categorie'])
-
             ;
             $article->SqlAdd(BDD::getInstance());
             header('Location:/Article');
