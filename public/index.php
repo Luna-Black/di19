@@ -34,6 +34,7 @@ $router->put('/Api/Article/:id/:json', "Api#ArticlePut#id#json");
 $router->get('/Article/ListAll','Article#listAll');
 $router->get('/Contact', 'Contact#showForm');
 $router->post('/Contact/sendMail', 'Contact#sendMail');
+$router->get('/ContactArticle/:id', 'Contact#sendMailByArticle#id');
 $router->get('/Login', 'User#loginForm');
 $router->post('/Login', 'User#loginCheck');
 $router->get('/Logout', 'User#logout');

@@ -1,6 +1,9 @@
 <?php
 namespace src\Controller;
 
+use src\Model\Article;
+use src\Model\Bdd;
+
 class ContactController extends AbstractController{
     private $mailer;
     private $transport;
@@ -27,6 +30,26 @@ class ContactController extends AbstractController{
                 $this->twig->render('Contact/mail.html.twig',
                     [
                         'message' => $_POST["content"]
+                    ])
+                ,'text/html'
+            );
+
+        $result = $this->mailer->send($mail);
+
+        return $result;
+    }
+
+    public function sendMailByArticle($id) {
+        $SQLArticle = new Article();
+        $article = $SQLArticle->SqlGet(Bdd::GetInstance(), $id);
+        $mail = (new \Swift_Message($article->getTitre()))
+            ->setFrom([$_POST["email"] => $_POST["name"]])
+            ->setTo('contact@monsite.fr')
+            ->setBody(
+                $this->twig->render('Contact/mailarticle.html.twig',
+                    [
+                        'message' => $_POST["content"],
+                        'article' => $article
                     ])
                 ,'text/html'
             );

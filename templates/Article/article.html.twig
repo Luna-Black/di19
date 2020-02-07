@@ -15,5 +15,16 @@
         {% endif %}
         <p>{{ article.Description }}</p>
     </div>
+    <div>
+        <label for="contact">Envoyez-nous un mail :</label>
+        <form name="contact" method="post" action="/ContactArticle/{{ article.Id }}">
+            <label for="name">Nom</label>
+            <input type="text" name="name">
+            <label for="email">Email</label>
+            <input type="email" name="email"><br/>
+            <textarea cols="60" rows="10" name="content"></textarea>
+            <input type="submit" value="Envoyer">
+        </form>
+    </div>
 
 {% endblock %}
