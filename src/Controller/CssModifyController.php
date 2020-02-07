@@ -8,11 +8,20 @@ use src\Model\Bdd;
 
        public function openFile(){
             $fichiercss = fopen('style.css', 'c+');
+            $read = fread($fichiercss, filesize('style.css'));
 
-            $this->twig->render('CSS/CssModify.html.twig',[
-            'fichiercss'=>$fichiercss
+           return $this->twig->render('CSS/CssModify.html.twig',[
+            'fichiercss'=>$read
             ]);
+            var_dump($fichiercss);
+            var_dump($read);
 
+        }
+
+        public function writeFile($fichiercss){
+           if(ISSET($_POST['css'])){
+               $write = fwrite($fichiercss, 'css');
+           }
         }
 
         public function saveFile($fichiercss){
