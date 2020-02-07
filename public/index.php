@@ -53,6 +53,7 @@ $router->post('/Admin/Users/UpdateRole/:id', 'User#updateRole#id');
 $router->get('/SignUp', 'User#showSignUp');
 $router->post('/SignUp', 'User#signup');
 
+
 echo $router->run();
 
 
