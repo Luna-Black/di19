@@ -11,6 +11,7 @@ class User {
 
 
 
+
     public function SqlAdd(\PDO $bdd) {
         $permissionsDict = array(
             "articles" => array(
@@ -35,10 +36,10 @@ class User {
             );
             $requete->execute([
                 "Email"=>$this->getEmail(),
-                "Mdp"=>$this->getMdp(),
+                "Mdp"=>password_hash($this->getMdp(), PASSWORD_BCRYPT),
                 "Pseudo"=>$this->getPseudo(),
                 "Role"=>"2",
-                "Permissions" => json_encode($permissionsDict)
+                "Permissions" => json_encode($permissionsDict),
             ]);
             return array("result"=>true,"message"=>$bdd->lastInsertId());
         }catch (\Exception $e){

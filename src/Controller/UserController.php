@@ -38,7 +38,7 @@ class UserController extends  AbstractController {
     public function loginCheck(){
         $SQLUser = new User();
         $user = $SQLUser->SqlGet(Bdd::GetInstance(), $_POST['username']);
-        if($_POST['password'] == $user->getMdp() and $_POST['username'] != ''){
+        if(password_verify($_POST['password'], $user->getMdp()) and $_POST['username'] != ''){
             unset($_SESSION['errorlogin']);
             $_SESSION['login'] = array(
                 'Pseudo' => $user->getPseudo(),
