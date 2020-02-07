@@ -19,6 +19,21 @@ class UserController extends  AbstractController {
         );
     }
 
+    public function showUserPage($id) {
+        if(isset($_SESSION['login'])) {
+            $SQLUser = new User();
+            $user = $SQLUser->SqlGet(Bdd::GetInstance(), $id);
+            return $this->twig->render('User/userpage.html.twig',[
+                'user' => $user,
+                    'token' => $_SESSION['login']['TokenApi']
+                ]
+            );
+        }else{
+            $_SESSION['errorlogin'] = 'Veuillez vous connectez.';
+            header('Location:/Login');
+        }
+    }
+
     public function updateRole($email) {
         UserController::checkPermission('users', 'updatePermissions');
         $SQLUser = new User();
@@ -44,7 +59,8 @@ class UserController extends  AbstractController {
                 'Pseudo' => $user->getPseudo(),
                 'Email' => $user->getEmail(),
                 'Role' => $user->getRole(),
-                'Permissions' => $user->getPermissions()
+                'Permissions' => $user->getPermissions(),
+                'TokenApi' => $user->getTokenApi()
             );
             header('Location:/');
         }else{

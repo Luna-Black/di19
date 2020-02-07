@@ -8,6 +8,7 @@ class User {
     private $Pseudo;
     private $Role;
     private $Permissions;
+    private $TokenApi;
 
 
 
@@ -53,7 +54,7 @@ class User {
 
     public function SqlGetAll(\PDO $bdd) {
         $requete = $bdd->prepare(
-            'SELECT utilisateurs.Id as userID, Pseudo, Mdp, Email, Permissions, roles.Nom as role 
+            'SELECT utilisateurs.Id as userID, Pseudo, Mdp, Email, Permissions, TokenApi, roles.Nom as role 
             FROM utilisateurs
             INNER JOIN roles on utilisateurs.Id_roles = roles.Id
             ORDER BY userID ASC'
@@ -69,6 +70,7 @@ class User {
             $user->setEmail($SQLUser['Email']);
             $user->setRole($SQLUser['role']);
             $user->setPermissions($SQLUser['Permissions']);
+            $user->setTokenApi($SQLUser['TokenApi']);
 
             $usersList[] = $user;
         }
@@ -77,7 +79,7 @@ class User {
 
     public function SqlGet(\PDO $bdd, $username) {
         $requete = $bdd->prepare(
-            'SELECT utilisateurs.Id as UserID, Pseudo, Mdp, Email, Permissions, roles.Nom as role FROM utilisateurs
+            'SELECT utilisateurs.Id as UserID, Pseudo, Mdp, Email, Permissions, TokenApi, roles.Nom as role FROM utilisateurs
             INNER JOIN roles on utilisateurs.Id_roles = roles.Id
             WHERE Pseudo=:username'
         );
@@ -94,6 +96,7 @@ class User {
         $user->setEmail($data['Email']);
         $user->setRole($data['role']);
         $user->setPermissions($data['Permissions']);
+        $user->setTokenApi($data['TokenApi']);
 
         return $user;
     }
@@ -105,6 +108,21 @@ class User {
             $requete->execute([
                 'permissions' => $this->getPermissions(),
                 'username' => $this->getPseudo()
+            ]);
+            return array("0", "[OK] Update");
+        }catch (\Exception $e){
+            return array("1", "[ERREUR] ".$e->getMessage());
+        }
+    }
+
+    public function SqlUpdateToken(\PDO $bdd) {
+        try{
+            $requete = $bdd->prepare(
+                'UPDATE utilisateurs SET TokenApi=:token WHERE Id=:userID'
+            );
+            $requete->execute([
+                'token' => $this->getTokenApi(),
+                'userID' => $this->getId()
             ]);
             return array("0", "[OK] Update");
         }catch (\Exception $e){
@@ -230,6 +248,22 @@ class User {
     public function setPermissions($Permissions)
     {
         $this->Permissions = $Permissions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTokenApi()
+    {
+        return $this->TokenApi;
+    }
+
+    /**
+     * @param mixed $TokenApi
+     */
+    public function setTokenApi($TokenApi)
+    {
+        $this->TokenApi = $TokenApi;
     }
 
 

@@ -3,15 +3,39 @@ namespace src\Controller;
 
 use src\Model\Article;
 use src\Model\Bdd;
+use src\Model\User;
 
 class ApiController {
 
-    public function ArticleGet()
+    public function ArticleGet($token)
     {
-        $article = new Article();
-        $listArticle = $article->SqlGet5LastValidated(Bdd::GetInstance());
-        $articlesJson = json_encode($listArticle);
-        return $articlesJson;
+        $SQLUser = new User();
+        $usersList = $SQLUser->SqlGetAll(Bdd::GetInstance());
+        $tokenFound = false;
+        foreach ($usersList as $user){
+            if($token == $user->getTokenApi()) {
+                $tokenFound = true;
+            }
+        }
+        if($tokenFound) {
+            $article = new Article();
+            $listArticle = $article->SqlGet5LastValidated(Bdd::GetInstance());
+            $articlesJson = json_encode($listArticle);
+            return $articlesJson;
+        }else{
+            return 'token invalide';
+        }
+    }
+
+    public function generateToken($username) {
+        $SQLUser = new User();
+        $user = $SQLUser->SqlGet(Bdd::GetInstance(), $username);
+        var_dump($user);
+        $token = bin2hex(random_bytes(32));
+        $user->setTokenApi($token);
+        $user->SqlUpdateToken(Bdd::GetInstance());
+        $_SESSION['login']['TokenApi'] = $token;
+        header('Location:/Userpage/'.$user->getPseudo());
     }
 
     public function ArticlePost()
