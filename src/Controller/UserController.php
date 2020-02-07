@@ -164,18 +164,18 @@ class UserController extends  AbstractController {
     }
 
     public function signup(){
-        if($_POST){
-            $user = new User();
-            $user->setPseudo($_POST['pseudo']);
-            $user->setMdp($_POST['password']);
-            $user->setEmail($_POST['email']);
+        if ($_POST) {
+            if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+                $_SESSION['errorlogin'] = "Mail invalide";
+                header('Location:/Login');
+                $user = new User();
+                $user->setPseudo($_POST['pseudo']);
+                $user->setMdp($_POST['password']);
+                $user->setEmail($_POST['email']);
             }
-
-        var_dump($user->SqlAdd(Bdd::GetInstance()));
-
-        return $this->twig->render('User/compte.html.twig');
-
-       }
+            return $this->twig->render('User/compte.html.twig');
+        }
+    }
 
 
     public function showSignUp() {
