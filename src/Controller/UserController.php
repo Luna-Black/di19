@@ -148,9 +148,9 @@ class UserController extends  AbstractController {
             $user->setPseudo($_POST['pseudo']);
             $user->setMdp($_POST['password']);
             $user->setEmail($_POST['email']);
-            }
+            };
 
-        var_dump($user->SqlAdd(Bdd::GetInstance()));
+        $user->SqlAdd(Bdd::GetInstance());
 
         return $this->twig->render('User/compte.html.twig');
 
