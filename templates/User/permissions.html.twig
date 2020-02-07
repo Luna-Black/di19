@@ -10,28 +10,34 @@
         <form method="post" action="/Admin/Users/Permissions/{{ user.Pseudo }}">
             <div>
                 <p>Articles :</p>
-                <input type="checkbox" name="articles[]" value="add" {% if permissions['articles']['add'] == True %}checked{% endif %}>
+                <input type="checkbox" name="articles[]" value="add">
                 <label for="add">Ajouter</label>
-                <input type="checkbox" name="articles[]" value="update" {% if permissions['articles']['update'] == True %}checked{% endif %}>
+                <input type="checkbox" name="articles[]" value="update">
                 <label for="update">Modifier</label>
-                <input type="checkbox" name="articles[]" value="delete" {% if permissions['articles']['delete'] == True %}checked{% endif %}>
+                <input type="checkbox" name="articles[]" value="delete">
                 <label for="delete">Supprimer</label>
-                <input type="checkbox" name="articles[]" value="validate" {% if permissions['articles']['validate'] == True %}checked{% endif %}>
+                <input type="checkbox" name="articles[]" value="validate">
                 <label for="validateArticle">Valider</label>
+                <input type="checkbox" name="articles[]" value="none">
+                <label for="validateArticle">Aucun</label>
             </div>
             <div>
                 <p>Catégories :</p>
-                <input type="checkbox" name="categories[]" value="add" {% if permissions['categories']['add'] == True %}checked{% endif %}>
+                <input type="checkbox" name="categories[]" value="add">
                 <label for="add">Ajouter</label>
-                <input type="checkbox" name="categories[]" value="update" {% if permissions['categories']['update'] == True %}checked{% endif %}>
+                <input type="checkbox" name="categories[]" value="update">
                 <label for="update">Modifier</label>
-                <input type="checkbox" name="categories[]" value="delete" {% if permissions['categories']['delete'] == True %}checked{% endif %}>
+                <input type="checkbox" name="categories[]" value="delete">
                 <label for="delete">Supprimer</label>
+                <input type="checkbox" name="categories[]" value="none">
+                <label for="validateArticle">Aucun</label>
             </div>
             <div>
                 <p>Membres :</p>
-                <input type="checkbox" name="users[]" value="updatePermissions" {% if permissions['users']['updatePermissions'] == True %}checked{% endif %}>
+                <input type="checkbox" name="users[]" value="updatePermissions">
                 <label for="updatePermissions">Modifier les droits</label>
+                <input type="checkbox" name="users[]" value="none">
+                <label for="validateArticle">Aucun</label>
             </div>
             <input type="submit">
         </form>
