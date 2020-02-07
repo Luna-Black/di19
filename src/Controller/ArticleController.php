@@ -171,7 +171,7 @@ class ArticleController extends AbstractController {
         $article->setStatut($statusID);
 
         $article->SqlUpdateStatus(BDD::getInstance());
-        header('Location:/Admin/2');
+        header('Location:/Admin/Articles/2');
     }
 
     public function Delete($articleID){
