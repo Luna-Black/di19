@@ -4,20 +4,15 @@
 
     <div class="container-fluid mt-2">
 
-        {% if reponse %}
-         <p> Etes vous un robot ?</p>
-        {% else %}
         <form method="post" action="/SignUp">
             <h2>Créer votre compte </h2>
             <p>Pseudo : <input type="text" name="pseudo"></p>
             <p>Adresse e-mail : <input type="email" name="email"></p>
             <p>Mot de passe : <input type="password" name="password"></p>
-            <div class="g-recaptcha" data-sitekey="6Ld3VdYUAAAAABm2FdYgzP5ho0Apb0l2_iKw0VgR"></div>
+            <div class="g-recaptcha" data-sitekey="6Ld3VdYUAAAAABm2FdYgzP5ho0Apb0l2_iKw0VgR" data-callback="correctCaptcha"></div>
             <br/>
-            <input type="submit">
+            <button type="submit" id="send_validation">Valider</button>
         </form>
     </div>
-        {% endif %}
-
 
 {% endblock %}
